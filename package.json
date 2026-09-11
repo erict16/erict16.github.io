@@ -50,9 +50,9 @@
   "author": {
     "email": "eric.tan@huaming.com",
     "name": "Eric Tan",
-    "url": "https://erict16.github.io/repo"
+    "url": "https://erict16.github.io"
   },
-  "homepage": "https://erict16.github.io/repo",
+  "homepage": "https://erict16.github.io",
   "browserslist": [
     ">0.2%",
     "not dead",

@@ -22,7 +22,7 @@ function Header() {
           alt="Eric Tan"
           className="rounded-full object-contain"
           height={48}
-          src="/repo/static/images/logo.png"
+          src="/static/images/logo.png"
           width={48}
         />
       </div>

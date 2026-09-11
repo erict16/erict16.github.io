@@ -21,7 +21,7 @@ export default function ExternalLink({
       <a
         className={cn(
           underline
-            ? "underline underline-offset-[3px] hover:bg-[url('/repo/static/squiggle.svg')] hover:no-underline"
+            ? "underline underline-offset-[3px] hover:bg-[url('/static/squiggle.svg')] hover:no-underline"
             : '',
           'text-secondary',
           'inline-block',
