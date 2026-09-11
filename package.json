@@ -1,0 +1,61 @@
+{
+  "name": "erictan.dev",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "format": "prettier --write .",
+    "lint:format": "prettier --cache --check .",
+    "lint:fix": "eslint --cache --fix .",
+    "lint": "eslint --cache ."
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.0.18",
+    "@react-three/drei": "^9.78.0",
+    "@react-three/fiber": "^8.13.4",
+    "framer-motion": "^10.12.18",
+    "next": "13.5.4",
+    "next-themes": "^0.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "three": "^0.154.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.9",
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "@types/node": "20.3.3",
+    "@types/react": "18.2.14",
+    "@types/react-dom": "18.2.6",
+    "@types/three": "^0.152.1",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
+    "autoprefixer": "10.4.14",
+    "eslint": "8.44.0",
+    "eslint-config-next": "13.4.8",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-sort-keys-fix": "^1.1.2",
+    "eslint-plugin-typescript-sort-keys": "^2.3.0",
+    "eslint-plugin-unicorn": "^47.0.0",
+    "postcss": "8.4.24",
+    "prettier": "^2.8.8",
+    "prettier-plugin-tailwindcss": "^0.3.0",
+    "tailwindcss": "3.3.2",
+    "typescript": "5.1.6"
+  },
+  "license": "MIT",
+  "author": {
+    "email": "eric.tan@huaming.com",
+    "name": "Eric Tan",
+    "url": "https://erict16.github.io/repo"
+  },
+  "homepage": "https://erict16.github.io/repo",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
+}
