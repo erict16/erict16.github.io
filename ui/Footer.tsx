@@ -12,7 +12,7 @@ export default function Footer() {
       <br />
       <span>
         {/* eslint-disable-next-line react/no-unescaped-entities */}
-        <i>️"Hello world!"</i>
+        <i>What invisible creates visible.</i>
       </span>
     </footer>
   );

@@ -20,7 +20,7 @@ function Header() {
       <div className="relative h-12 w-12">
         <Image
           alt="Eric Tan"
-          className="rounded-full object-contain"
+          className="rounded-full object-cover"
           height={48}
           src="/static/images/logo.png"
           width={48}
@@ -28,7 +28,7 @@ function Header() {
       </div>
       <div className="flex flex-col">
         <h1>Eric Tan</h1>
-        <p className="text-quaternary">Overseas sales · Shanghai</p>
+        <p className="text-quaternary">Software Engineer</p>
       </div>
     </div>
   );
@@ -62,7 +62,7 @@ function ContactLink({
 function Contact() {
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-tertiary">Connect</p>
+      <p className="text-tertiary">Social</p>
       <div className="grid grid-cols-3 gap-4">
         <ContactLink
           href="https://github.com/erict16"
@@ -93,7 +93,7 @@ function Projects() {
           <ContactLink
             href={project.href}
             key={project.title}
-            title={project.title}
+            title={`${project.emoji} ${project.title}`}
             website={project.description}
           />
         ))}

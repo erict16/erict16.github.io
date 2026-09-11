@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     { color: '#171717', media: '(prefers-color-scheme: dark)' },
   ],
   title: {
-    default: 'Eric Tan',
+    default: 'Eric Tan - Software Engineer',
     template: '%s | Eric Tan',
   },
 };

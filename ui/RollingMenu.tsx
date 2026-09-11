@@ -119,11 +119,11 @@ export default function RollingMenu() {
       <motion.button
         animate={{ rotate: expanded ? 45 : 0 }}
         aria-label="Navigation Menu"
-        className="h-10 w-10 select-none items-center rounded-full bg-black p-3 dark:bg-white"
+        className="flex h-10 w-10 select-none items-center justify-center rounded-full bg-black dark:bg-white"
         onClick={handleClick}
         whileTap={{ scale: 1.1 }}
       >
-        <PlusIcon className="h-6 w-6 text-white dark:text-black" />
+        <PlusIcon className="h-8 w-8 text-white dark:text-black" />
       </motion.button>
       <AnimatePresence>
         {expanded && (
