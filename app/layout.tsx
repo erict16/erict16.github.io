@@ -70,8 +70,8 @@ export default function RootLayout({
       <body
         className={cn(
           `${inter.className}`,
-          'relative h-full min-h-screen w-full',
-          'my-4 bg-white dark:bg-gray-900 sm:my-24',
+          'relative min-h-screen w-full',
+          'bg-white py-6 dark:bg-gray-900 sm:py-10',
           'motion-reduce:transform-none motion-reduce:transition-none',
         )}
       >

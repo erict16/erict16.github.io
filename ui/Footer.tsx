@@ -6,10 +6,8 @@ import { useRef } from 'react';
 
 export default function Footer() {
   return (
-    <footer className="text-quaternary mx-auto mt-16 flex max-w-2xl flex-col items-center justify-center gap-4 border-t border-dashed border-gray-200 pb-4 pt-4 text-sm dark:border-gray-700 dark:text-gray-600">
-      <br />
+    <footer className="text-quaternary mx-auto mt-8 flex max-w-2xl flex-col items-center justify-center gap-3 border-t border-dashed border-gray-200 pb-2 pt-4 text-sm dark:border-gray-700 dark:text-gray-600">
       <FooterGraphic />
-      <br />
       <span>
         {/* eslint-disable-next-line react/no-unescaped-entities */}
         <i>What invisible creates visible.</i>
@@ -73,7 +71,11 @@ function Birds() {
 
 function FooterGraphic() {
   return (
-    <Canvas camera={{ fov: 40, position: [0, 0, 5] }} gl={{ antialias: false }}>
+    <Canvas
+      camera={{ fov: 40, position: [0, 0, 5] }}
+      gl={{ antialias: false }}
+      style={{ height: 112, width: '100%' }}
+    >
       <PixelatedSphere />
       <Birds />
       <OrbitControls enableZoom={false} />

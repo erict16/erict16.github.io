@@ -1,4 +1,5 @@
 import { projects } from '@/data/projects';
+import { EMAIL } from '@/lib/site';
 import ExternalLink from '@/ui/ExternalLink';
 import { EnvelopeLogo, GitHubLogo, LinkedInLogo } from '@/ui/Icons';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
@@ -6,7 +7,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-16 text-sm sm:text-base">
+    <div className="flex flex-col gap-8 text-sm sm:text-base">
       <Header />
       <Projects />
       <AboutMe />
@@ -16,21 +17,19 @@ export default function Home() {
 
 function Header() {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-row items-center gap-4">
-        <div className="relative h-12 w-12">
-          <Image
-            alt="Eric Tan"
-            className="rounded-full object-cover"
-            height={48}
-            src="/static/images/logo.png"
-            width={48}
-          />
-        </div>
-        <div className="flex flex-col">
-          <h1>Eric Tan</h1>
-          <p className="text-quaternary">Software Engineer</p>
-        </div>
+    <div className="flex flex-row items-center gap-4">
+      <div className="relative h-12 w-12 shrink-0">
+        <Image
+          alt="Eric Tan"
+          className="rounded-full object-cover"
+          height={48}
+          src="/static/images/logo.png"
+          width={48}
+        />
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <h1>Eric Tan</h1>
+        <p className="text-quaternary">Software Engineer</p>
       </div>
       <SocialLinks />
     </div>
@@ -67,7 +66,7 @@ function SocialLinks() {
           <a
             aria-label="Email"
             className="text-quaternary hover:text-primary inline-flex rounded-sm transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-            href="mailto:eric.tan@huaming.com"
+            href={`mailto:${EMAIL}`}
           >
             <EnvelopeLogo className="h-5 w-5 fill-current" />
           </a>
@@ -124,7 +123,7 @@ function AboutMe() {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-tertiary">About me</p>
-      <div className="text-secondary flex flex-col gap-8">
+      <div className="text-secondary flex flex-col gap-3">
         <p>
           I work overseas sales at Shanghai Huaming Power Equipment. I also
           build small tools around that work: tap-changer selection, drawing
@@ -132,8 +131,8 @@ function AboutMe() {
         </p>
         <p>
           Reach me at{' '}
-          <ExternalLink href="mailto:eric.tan@huaming.com">
-            <i>eric.tan@huaming.com</i>
+          <ExternalLink href={`mailto:${EMAIL}`}>
+            <i>{EMAIL}</i>
           </ExternalLink>
           .
         </p>
