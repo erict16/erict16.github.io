@@ -6,7 +6,7 @@ import { useRef } from 'react';
 
 export default function Footer() {
   return (
-    <footer className="text-quaternary mx-auto flex max-w-2xl flex-col items-center justify-center gap-4 border-t border-dashed border-gray-200 pb-4 pt-4 text-sm dark:border-gray-700 dark:text-gray-600">
+    <footer className="text-quaternary mx-auto mt-16 flex max-w-2xl flex-col items-center justify-center gap-4 border-t border-dashed border-gray-200 pb-4 pt-4 text-sm dark:border-gray-700 dark:text-gray-600">
       <br />
       <FooterGraphic />
       <br />

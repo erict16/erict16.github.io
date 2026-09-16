@@ -1,5 +1,6 @@
 import { projects } from '@/data/projects';
 import ExternalLink from '@/ui/ExternalLink';
+import { EnvelopeLogo, GitHubLogo, LinkedInLogo } from '@/ui/Icons';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 
@@ -8,7 +9,6 @@ export default function Home() {
     <div className="flex flex-col gap-16 text-sm sm:text-base">
       <Header />
       <Projects />
-      <Contact />
       <AboutMe />
     </div>
   );
@@ -16,21 +16,64 @@ export default function Home() {
 
 function Header() {
   return (
-    <div className="flex flex-row items-center gap-4">
-      <div className="relative h-12 w-12">
-        <Image
-          alt="Eric Tan"
-          className="rounded-full object-cover"
-          height={48}
-          src="/static/images/logo.png"
-          width={48}
-        />
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-row items-center gap-4">
+        <div className="relative h-12 w-12">
+          <Image
+            alt="Eric Tan"
+            className="rounded-full object-cover"
+            height={48}
+            src="/static/images/logo.png"
+            width={48}
+          />
+        </div>
+        <div className="flex flex-col">
+          <h1>Eric Tan</h1>
+          <p className="text-quaternary">Software Engineer</p>
+        </div>
       </div>
-      <div className="flex flex-col">
-        <h1>Eric Tan</h1>
-        <p className="text-quaternary">Software Engineer</p>
-      </div>
+      <SocialLinks />
     </div>
+  );
+}
+
+function SocialLinks() {
+  return (
+    <nav aria-label="Social">
+      <ul className="flex items-center gap-3">
+        <li>
+          <a
+            aria-label="GitHub"
+            className="text-quaternary hover:text-primary inline-flex rounded-sm transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            href="https://github.com/erict16"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <GitHubLogo className="h-5 w-5 fill-current" />
+          </a>
+        </li>
+        <li>
+          <a
+            aria-label="LinkedIn"
+            className="text-quaternary hover:text-primary inline-flex rounded-sm transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            href="https://www.linkedin.com/in/helloerictan/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <LinkedInLogo className="h-5 w-5 fill-current" />
+          </a>
+        </li>
+        <li>
+          <a
+            aria-label="Email"
+            className="text-quaternary hover:text-primary inline-flex rounded-sm transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            href="mailto:eric.tan@huaming.com"
+          >
+            <EnvelopeLogo className="h-5 w-5 fill-current" />
+          </a>
+        </li>
+      </ul>
+    </nav>
   );
 }
 
@@ -56,31 +99,6 @@ function ContactLink({
       </a>
       {website && <p className="text-quaternary text-xs">{website}</p>}
     </span>
-  );
-}
-
-function Contact() {
-  return (
-    <div className="flex flex-col gap-4">
-      <p className="text-tertiary">Social</p>
-      <div className="grid grid-cols-3 gap-4">
-        <ContactLink
-          href="https://github.com/erict16"
-          title="GitHub"
-          website="Code"
-        />
-        <ContactLink
-          href="https://www.linkedin.com/in/helloerictan/"
-          title="LinkedIn"
-          website="Profile"
-        />
-        <ContactLink
-          href="mailto:eric.tan@huaming.com"
-          title="Email"
-          website="eric.tan@huaming.com"
-        />
-      </div>
-    </div>
   );
 }
 
