@@ -6,12 +6,11 @@ import { useRef } from 'react';
 
 export default function Footer() {
   return (
-    <footer className="text-quaternary mx-auto mt-8 flex max-w-2xl flex-col items-center justify-center gap-3 border-t border-dashed border-gray-200 pb-2 pt-4 text-sm dark:border-gray-700 dark:text-gray-600">
+    <footer className="text-quaternary mx-auto flex w-full max-w-2xl flex-col items-center justify-center gap-3 pt-6 text-sm dark:text-gray-600">
       <FooterGraphic />
-      <span>
-        {/* eslint-disable-next-line react/no-unescaped-entities */}
-        <i>What invisible creates visible.</i>
-      </span>
+      <p>
+        <i>&quot;What invisible creates visible.&quot;</i>
+      </p>
     </footer>
   );
 }

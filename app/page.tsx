@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-8 text-sm sm:text-base">
+    <div className="flex flex-1 flex-col justify-center gap-8 text-sm sm:text-base">
       <Header />
       <Projects />
       <AboutMe />
@@ -29,7 +29,7 @@ function Header() {
       </div>
       <div className="flex min-w-0 flex-1 flex-col">
         <h1>Eric Tan</h1>
-        <p className="text-quaternary">Software Engineer</p>
+        <p className="text-quaternary">Regional Sales at Huaming</p>
       </div>
       <SocialLinks />
     </div>
@@ -125,12 +125,11 @@ function AboutMe() {
       <p className="text-tertiary">About me</p>
       <div className="text-secondary flex flex-col gap-3">
         <p>
-          I work overseas sales at Shanghai Huaming Power Equipment. I also
-          build small tools around that work: tap-changer selection, drawing
-          translation, order sheets.
+          I build small tools: tap-changer selection, drawing translation, order
+          sheets.
         </p>
         <p>
-          Reach me at{' '}
+          If you have any feedback, don&apos;t hesitate to email me at{' '}
           <ExternalLink href={`mailto:${EMAIL}`}>
             <i>{EMAIL}</i>
           </ExternalLink>

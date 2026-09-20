@@ -11,7 +11,7 @@ export default function AnimateEnter({
     <LazyMotion features={domAnimation}>
       <m.main
         animate={{ opacity: 1, y: 0 }}
-        className="mx-auto max-w-2xl p-4"
+        className="mx-auto flex min-h-screen max-w-2xl flex-col px-4 pb-8 pt-6 sm:pb-10 sm:pt-8"
         exit={{ opacity: 0, y: 20 }}
         id="main-content"
         initial={{ opacity: 0, y: -20 }}

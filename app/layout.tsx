@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   authors: [{ name: 'Eric Tan', url: SITE_URL }],
   creator: 'Eric Tan',
-  description: 'Eric Tan. Overseas sales in Shanghai. Small tools on the side.',
+  description: 'Eric Tan. Regional sales at Huaming. Small tools on the side.',
   icons: {
     apple: `${SITE_URL}/static/favicons/apple-touch-icon.png`,
     icon: `${SITE_URL}/static/favicons/favicon-32x32.png`,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   manifest: `${SITE_URL}/static/favicons/site.webmanifest`,
   metadataBase: new URL(SITE_URL),
   openGraph: {
-    description: 'Eric Tan. Overseas sales in Shanghai.',
+    description: 'Eric Tan. Regional sales at Huaming.',
     images: [
       {
         alt: 'Eric Tan',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     { color: '#171717', media: '(prefers-color-scheme: dark)' },
   ],
   title: {
-    default: 'Eric Tan - Software Engineer',
+    default: 'Eric Tan',
     template: '%s | Eric Tan',
   },
 };
@@ -71,7 +71,7 @@ export default function RootLayout({
         className={cn(
           `${inter.className}`,
           'relative min-h-screen w-full',
-          'bg-white py-6 dark:bg-gray-900 sm:py-10',
+          'bg-white dark:bg-gray-900',
           'motion-reduce:transform-none motion-reduce:transition-none',
         )}
       >
