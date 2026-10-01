@@ -29,7 +29,7 @@ function Header() {
       </div>
       <div className="flex min-w-0 flex-1 flex-col">
         <h1>Eric Tan</h1>
-        <p className="text-quaternary">Regional Sales at Huaming</p>
+        <p className="text-quaternary">Full-stack Dev</p>
       </div>
       <SocialLinks />
     </div>

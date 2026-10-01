@@ -15,7 +15,7 @@ export const projects: Project[] = [
   {
     emoji: '⚡',
     title: 'OLTC Selector',
-    description: 'Huaming tap-changer type designation.',
+    description: 'Tap-changer type designation.',
     href: 'https://erict16.github.io/oltc-selector/',
   },
   {

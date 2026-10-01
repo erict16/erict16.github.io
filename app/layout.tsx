@@ -13,17 +13,17 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   authors: [{ name: 'Eric Tan', url: SITE_URL }],
   creator: 'Eric Tan',
-  description: 'Eric Tan. Regional sales at Huaming. Small tools on the side.',
+  description: 'Eric Tan. Full-stack Dev. Small tools on the side.',
   icons: {
     apple: `${SITE_URL}/static/favicons/apple-touch-icon.png`,
     icon: `${SITE_URL}/static/favicons/favicon-32x32.png`,
     shortcut: `${SITE_URL}/favicon.ico`,
   },
-  keywords: ['Eric Tan', 'Huaming', 'Shanghai', 'OLTC'],
+  keywords: ['Eric Tan', 'Shanghai', 'OLTC'],
   manifest: `${SITE_URL}/static/favicons/site.webmanifest`,
   metadataBase: new URL(SITE_URL),
   openGraph: {
-    description: 'Eric Tan. Regional sales at Huaming.',
+    description: 'Eric Tan. Full-stack Dev.',
     images: [
       {
         alt: 'Eric Tan',
