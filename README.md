@@ -26,7 +26,7 @@
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Hero**         | About 33,000 points fly in and build the Ragdoll cat. Move the pointer and they move out of the way. Scroll, and they drift apart as dust.                         |
 | **Ragdoll Mail** | The demo film tips up as it comes into view. Below it, three cards you can use: an AI agent replying from the terminal, search as you type, and Send with an Undo. |
-| **More work**    | The Drunken Dragon, the tap-changer 3D viewer, 图译 Tuyi (a drawing that translates its own labels), OLTC Selector, TypeBooks and 500 Words.                       |
+| **More work**    | The Drunken Dragon, the tap-changer 3D viewer, Tuyi, the DWG/DXF File Translator (a drawing whose labels change language), OLTC Selector, TypeBooks and 500 Words. |
 | **Say hello**    | The points gather into a turning sphere beside the mail address.                                                                                                   |
 
 <table>

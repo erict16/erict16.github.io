@@ -27,9 +27,9 @@ export const projects = {
   // Not linked yet: the tuyi repository and its website are private.
   tuyi: {
     description:
-      'Translates the Chinese on DWG and DXF drawings into English and writes it back into a new file. No AutoCAD needed.',
+      'Translates the text on DWG and DXF drawings into any language and writes it back into a new file. No AutoCAD needed.',
     href: 'https://erict16.github.io/tuyi/',
-    title: '图译 Tuyi',
+    title: 'Tuyi · DWG/DXF File Translator',
   },
   typebooks: {
     description: 'Practice typing by retyping classic books.',

@@ -1100,63 +1100,152 @@ main,
   padding-bottom: 0;
 }
 
-.tuyi-file {
+.tuyi-hud {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tuyi-file,
+.tuyi-pair {
   color: var(--text-3);
   font-family: var(--mono);
   font-size: 12.5px;
 }
 
-.tuyi-file span {
+.tuyi-prefix {
   display: inline-block;
-  max-width: 0;
-  overflow: hidden;
   color: var(--teal);
-  vertical-align: bottom;
-  transition: max-width 0.5s var(--ease);
+  animation: tuyi-in 0.45s var(--ease) both;
 }
 
-.tuyi-file span.on {
-  max-width: 3ch;
+.tuyi-pair {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  letter-spacing: 0.04em;
+}
+
+.tuyi-pair i {
+  font-style: normal;
+}
+
+.tuyi-pair b {
+  display: inline-block;
+  color: var(--teal);
+  font-weight: 500;
+  animation: tuyi-in 0.45s var(--ease) both;
+}
+
+@keyframes tuyi-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 
 .tuyi svg {
+  position: relative;
   display: block;
   width: 100%;
   height: auto;
-  margin-top: 6px;
   overflow: visible;
+}
+
+.tuyi-sheet {
+  position: relative;
+  margin-top: 10px;
+}
+
+/* the CAD grid behind the drawing, fading out at the edges */
+.tuyi-sheet::before {
+  position: absolute;
+  inset: -14px -26px;
+  background-image:
+    linear-gradient(rgba(108, 189, 181, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108, 189, 181, 0.13) 1px, transparent 1px),
+    linear-gradient(rgba(108, 189, 181, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108, 189, 181, 0.06) 1px, transparent 1px);
+  background-position: center;
+  background-size:
+    100px 100px,
+    100px 100px,
+    20px 20px,
+    20px 20px;
+  content: '';
+  -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent);
+  mask-image: radial-gradient(closest-side, #000 40%, transparent);
+  pointer-events: none;
 }
 
 .tuyi-lines {
   fill: none;
-  stroke: rgba(243, 232, 215, 0.34);
+  stroke: rgba(243, 232, 215, 0.38);
   stroke-width: 1.2;
 }
 
-.tuyi-lines .tuyi-dot {
-  fill: rgba(214, 165, 123, 0.55);
-  stroke: none;
+.tuyi-lines rect,
+.tuyi-lines line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition:
+    stroke-dashoffset 1.8s var(--ease),
+    stroke 0.6s;
 }
 
-.tuyi-lines .tuyi-frame {
-  stroke: rgba(243, 232, 215, 0.2);
+.tuyi.on .tuyi-lines rect,
+.tuyi.on .tuyi-lines line {
+  stroke-dashoffset: 0;
+}
+
+.tuyi.done .tuyi-lines {
+  stroke: rgba(108, 189, 181, 0.6);
+}
+
+.tuyi-lines .tuyi-dot {
+  fill: rgba(214, 165, 123, 0.6);
+  stroke: none;
+  opacity: 0;
+  transition: opacity 0.6s 0.9s;
+}
+
+.tuyi.on .tuyi-dot {
+  opacity: 1;
+}
+
+.tuyi-lines .tuyi-frame,
+.tuyi-lines .tuyi-dim {
+  stroke: rgba(243, 232, 215, 0.22);
+}
+
+.tuyi-num {
+  fill: var(--text-3);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.tuyi-scan {
+  filter: drop-shadow(0 0 6px var(--teal));
 }
 
 .tuyi-label polyline {
   fill: none;
-  stroke: rgba(243, 232, 215, 0.3);
+  stroke: rgba(108, 189, 181, 0.5);
   stroke-width: 1;
 }
 
 .tuyi-label circle {
-  fill: var(--text-3);
+  fill: var(--teal);
 }
 
 .tuyi-label text {
-  fill: var(--text-2);
+  fill: var(--text);
   font-family: var(--sans);
   font-size: 13px;
-  transition: fill 0.4s;
+  transition:
+    fill 0.6s,
+    filter 0.6s;
 }
 
 .tuyi-label.live text {
@@ -1164,24 +1253,45 @@ main,
   font-family: var(--mono);
 }
 
-.tuyi-label.en text {
-  fill: var(--text);
+.tuyi-label.flash text {
+  fill: #c9f2ed;
+  filter: drop-shadow(0 0 8px var(--teal));
 }
 
-.tuyi-label.en circle,
-.tuyi-label.live circle {
-  fill: var(--teal);
+.tuyi-label .tuyi-ping {
+  fill: none;
+  stroke: var(--teal);
+  stroke-width: 1.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: tuyi-ping 0.7s var(--ease) both;
 }
 
-.tuyi-label.en polyline,
-.tuyi-label.live polyline {
-  stroke: rgba(108, 189, 181, 0.5);
+@keyframes tuyi-ping {
+  from {
+    opacity: 1;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
 }
 
 .tuyi-model {
   fill: var(--text-3);
   font-family: var(--mono);
   font-size: 12px;
+}
+
+/* Without script, show the drawing as it ends up. */
+html:not(.js) .tuyi-lines rect,
+html:not(.js) .tuyi-lines line {
+  stroke-dashoffset: 0;
+}
+
+html:not(.js) .tuyi-dot {
+  opacity: 1;
 }
 
 .days {
