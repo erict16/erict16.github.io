@@ -877,16 +877,20 @@ main,
   grid-column: span 5;
 }
 
+.work-tuyi {
+  grid-column: span 7;
+}
+
 .work-selector {
   grid-column: span 5;
 }
 
 .work-typebooks {
-  grid-column: span 4;
+  grid-column: span 7;
 }
 
 .work-words {
-  grid-column: span 3;
+  grid-column: span 5;
 }
 
 .shot {
@@ -994,6 +998,102 @@ main,
 .book .caret {
   width: 2px;
   margin: 0 1px 0 0;
+}
+
+.work-selector .visual {
+  flex: 1;
+  height: auto;
+  min-height: 216px;
+}
+
+.work-tuyi .visual {
+  height: auto;
+  min-height: 216px;
+  padding-bottom: 0;
+}
+
+.tuyi-file {
+  color: var(--text-3);
+  font-family: var(--mono);
+  font-size: 12.5px;
+}
+
+.tuyi-file span {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  color: var(--teal);
+  vertical-align: bottom;
+  transition: max-width 0.5s var(--ease);
+}
+
+.tuyi-file span.on {
+  max-width: 3ch;
+}
+
+.tuyi svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 6px;
+  overflow: visible;
+}
+
+.tuyi-lines {
+  fill: none;
+  stroke: rgba(243, 232, 215, 0.34);
+  stroke-width: 1.2;
+}
+
+.tuyi-lines .tuyi-dot {
+  fill: rgba(214, 165, 123, 0.55);
+  stroke: none;
+}
+
+.tuyi-lines .tuyi-frame {
+  stroke: rgba(243, 232, 215, 0.2);
+}
+
+.tuyi-label polyline {
+  fill: none;
+  stroke: rgba(243, 232, 215, 0.3);
+  stroke-width: 1;
+}
+
+.tuyi-label circle {
+  fill: var(--text-3);
+}
+
+.tuyi-label text {
+  fill: var(--text-2);
+  font-family: var(--sans);
+  font-size: 13px;
+  transition: fill 0.4s;
+}
+
+.tuyi-label.live text {
+  fill: var(--teal);
+  font-family: var(--mono);
+}
+
+.tuyi-label.en text {
+  fill: var(--text);
+}
+
+.tuyi-label.en circle,
+.tuyi-label.live circle {
+  fill: var(--teal);
+}
+
+.tuyi-label.en polyline,
+.tuyi-label.live polyline {
+  stroke: rgba(108, 189, 181, 0.5);
+}
+
+.tuyi-model {
+  fill: var(--text-3);
+  font-family: var(--mono);
+  font-size: 12px;
 }
 
 .days {
@@ -1119,6 +1219,7 @@ main,
   .rag-side,
   .work-tavern,
   .work-anatomy,
+  .work-tuyi,
   .work-selector,
   .work-typebooks,
   .work-words {
@@ -1174,6 +1275,14 @@ main,
 @media (max-width: 600px) {
   .nav nav a:first-child {
     display: none;
+  }
+
+  .tuyi-label text {
+    font-size: 17px;
+  }
+
+  .tuyi-model {
+    font-size: 14px;
   }
 
   .card {

@@ -4,6 +4,7 @@ import { EnvelopeLogo, GitHubLogo, LinkedInLogo } from '@/ui/Icons';
 import RagdollDemo from '@/ui/RagdollDemo';
 import SearchDemo from '@/ui/SearchDemo';
 import Terminal from '@/ui/Terminal';
+import TuyiDrawing from '@/ui/TuyiDrawing';
 import TypeCode from '@/ui/TypeCode';
 import TypingBook from '@/ui/TypingBook';
 import UndoSend from '@/ui/UndoSend';
@@ -150,7 +151,7 @@ function Ragdoll() {
 }
 
 function Work() {
-  const { anatomy, selector, tavern, typebooks, words } = projects;
+  const { anatomy, selector, tavern, tuyi, typebooks, words } = projects;
   return (
     <section className="section" id="work">
       <div className="wrap">
@@ -182,7 +183,13 @@ function Work() {
               {anatomy.title}
             </CardText>
           </Card>
-          <Card className="work-selector" href={selector.href} step={0}>
+          <Card className="work-tuyi" step={0}>
+            <div className="visual">
+              <TuyiDrawing />
+            </div>
+            <CardText text={tuyi.description}>{tuyi.title}</CardText>
+          </Card>
+          <Card className="work-selector" href={selector.href} step={1}>
             <div className="visual">
               <TypeCode />
             </div>
@@ -190,7 +197,7 @@ function Work() {
               {selector.title}
             </CardText>
           </Card>
-          <Card className="work-typebooks" href={typebooks.href} step={1}>
+          <Card className="work-typebooks" href={typebooks.href} step={0}>
             <div className="visual">
               <TypingBook />
             </div>
@@ -198,7 +205,7 @@ function Work() {
               {typebooks.title}
             </CardText>
           </Card>
-          <Card className="work-words" href={words.href} step={2}>
+          <Card className="work-words" href={words.href} step={1}>
             <div className="visual">
               <div aria-hidden="true" className="days">
                 {Array.from({ length: 28 }, (_, day) => (

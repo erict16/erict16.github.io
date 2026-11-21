@@ -17,6 +17,13 @@ export const projects = {
     href: 'https://oltc-selector.vercel.app/',
     title: 'OLTC Selector',
   },
+  // Not linked yet: the tuyi repository and its website are private.
+  tuyi: {
+    description:
+      'Translates the Chinese on DWG and DXF drawings into English and writes it back into a new file. No AutoCAD needed.',
+    href: 'https://erict16.github.io/tuyi/',
+    title: '图译 Tuyi',
+  },
   tavern: {
     description:
       'Texas Hold’em in 3D against five tavern regulars who learn how you play. Every model, sound and song is made by code.',
