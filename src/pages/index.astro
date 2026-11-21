@@ -178,11 +178,13 @@ const delay = (step: number) => ({ '--d': `${step * 90}ms` });
               {anatomy.title}
             </CardText>
           </Card>
-          <Card class="work-tuyi" step={0}>
+          <Card class="work-tuyi" href={tuyi.href} step={0}>
             <div class="visual">
               <TuyiDrawing client:load />
             </div>
-            <CardText text={tuyi.description}>{tuyi.title}</CardText>
+            <CardText arrow text={tuyi.description}>
+              {tuyi.title}
+            </CardText>
           </Card>
           <Card class="work-selector" href={selector.href} step={1}>
             <div class="visual">

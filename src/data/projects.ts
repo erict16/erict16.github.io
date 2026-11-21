@@ -24,11 +24,10 @@ export const projects = {
     href: 'https://tavern-holdem.vercel.app',
     title: 'The Drunken Dragon',
   },
-  // Not linked yet: the tuyi repository and its website are private.
   tuyi: {
     description:
       'Translates the text on DWG and DXF drawings into any language and writes it back into a new file. No AutoCAD needed.',
-    href: 'https://erict16.github.io/tuyi/',
+    href: 'https://erict16.github.io/tuyi/en.html',
     title: 'Tuyi · DWG/DXF File Translator',
   },
   typebooks: {
