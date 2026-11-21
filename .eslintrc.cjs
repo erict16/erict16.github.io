@@ -11,7 +11,6 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:react-hooks/recommended',
     'plugin:react/recommended',
-    'next/core-web-vitals',
   ],
   overrides: [
     {
@@ -114,8 +113,11 @@ module.exports = {
     'import/parsers': {
       '@typescript-eslint/parser': ['.ts', '.tsx'],
     },
+    'import/resolver': {
+      typescript: {},
+    },
     react: {
-      version: '18.0.0',
+      version: '19.0',
     },
   },
 };

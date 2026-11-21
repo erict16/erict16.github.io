@@ -3,29 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
     "format": "prettier --write .",
     "lint:format": "prettier --cache --check .",
-    "lint:fix": "eslint --cache --fix .",
-    "lint": "eslint --cache ."
+    "lint:fix": "eslint --cache --fix --ext .ts,.tsx,.js,.cjs,.mjs .",
+    "lint": "eslint --cache --ext .ts,.tsx,.js,.cjs,.mjs ."
   },
   "dependencies": {
+    "@astrojs/react": "^5.0.7",
     "@heroicons/react": "^2.0.18",
-    "next": "13.5.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@tailwindcss/vite": "^4.3.5",
+    "astro": "^6.4.8",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
-    "@types/node": "20.3.3",
-    "@types/react": "18.2.14",
-    "@types/react-dom": "18.2.6",
+    "@astrojs/check": "^0.9.12",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
-    "autoprefixer": "10.4.14",
     "eslint": "8.44.0",
-    "eslint-config-next": "13.4.8",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "^7.32.2",
@@ -33,11 +37,10 @@
     "eslint-plugin-sort-keys-fix": "^1.1.2",
     "eslint-plugin-typescript-sort-keys": "^2.3.0",
     "eslint-plugin-unicorn": "^47.0.0",
-    "postcss": "8.4.24",
-    "prettier": "^2.8.8",
-    "prettier-plugin-tailwindcss": "^0.3.0",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.1.6"
+    "prettier": "^3.10.1",
+    "prettier-plugin-astro": "^1.1.2",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "typescript": "5.9.3"
   },
   "license": "MIT",
   "author": {
@@ -50,5 +53,9 @@
     ">0.2%",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  }
 }

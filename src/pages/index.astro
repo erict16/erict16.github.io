@@ -1,0 +1,262 @@
+---
+import Card from '@/components/Card.astro';
+import CardText from '@/components/CardText.astro';
+import Logo from '@/components/Logo.astro';
+import RagdollDemo from '@/components/RagdollDemo';
+import SearchDemo from '@/components/SearchDemo';
+import Terminal from '@/components/Terminal';
+import TuyiDrawing from '@/components/TuyiDrawing';
+import TypeCode from '@/components/TypeCode';
+import TypingBook from '@/components/TypingBook';
+import UndoSend from '@/components/UndoSend';
+import { projects, ragdoll } from '@/data/projects';
+import Base from '@/layouts/Base.astro';
+import { EMAIL, GITHUB, LINKEDIN } from '@/lib/site';
+import { ArrowDownIcon, ArrowUpRightIcon } from '@heroicons/react/24/outline';
+import { CheckIcon } from '@heroicons/react/24/solid';
+
+const NAME = 'Eric Tan';
+const DAYS_DONE = 17;
+// The gap is a no-break space, so it keeps its width.
+const LETTERS = [...NAME].map((letter) => (letter === ' ' ? ' ' : letter));
+const { anatomy, selector, tavern, tuyi, typebooks, words } = projects;
+
+const delay = (step: number) => ({ '--d': `${step * 90}ms` });
+---
+
+<Base>
+  <header class="nav" data-nav>
+    <div class="wrap">
+      <a class="nav-me" href="#top">
+        <img
+          alt=""
+          decoding="async"
+          height="28"
+          loading="lazy"
+          src="/static/images/logo.png"
+          style="color:transparent"
+          width="28"
+        />
+        {NAME}
+      </a>
+      <nav aria-label="Main">
+        <a href="#ragdoll">Ragdoll Mail</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+        <a aria-label="GitHub" class="nav-icon" href={GITHUB}>
+          <Logo name="github" />
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" id="top">
+      <div aria-hidden="true" class="hero-cat" data-cat>
+        <img
+          alt=""
+          decoding="async"
+          height="256"
+          loading="lazy"
+          src="/static/home/ragdoll-icon.webp"
+          style="color:transparent"
+          width="256"
+        />
+      </div>
+      <div class="wrap">
+        <div class="hero-copy">
+          <p class="eyebrow">Full-stack dev</p>
+          <h1 aria-label={NAME}>
+            {LETTERS.map((letter, index) => (
+              <span aria-hidden="true" style={{ '--i': index }}>
+                {letter}
+              </span>
+            ))}
+          </h1>
+          <p class="lead">I build small tools that do one job well.</p>
+          <a class="btn primary" href="#ragdoll">
+            See my work
+            <ArrowDownIcon aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ragdoll">
+      <div class="wrap">
+        <div class="rag-head">
+          <p class="rag-name" data-reveal>
+            <img
+              alt=""
+              decoding="async"
+              height="44"
+              loading="lazy"
+              src="/static/home/ragdoll-icon.webp"
+              style="color:transparent"
+              width="44"
+            />
+            {ragdoll.title}
+          </p>
+          <h2 class="display" data-reveal style={delay(1)}>
+            The mail app your <em>AI agent</em> can use.
+          </h2>
+          <p class="intro" data-reveal style={delay(2)}>
+            A free mail app for Mac and Windows with a command line built in.
+            Claude Code, Codex and other agents can search your mail and write
+            replies. Nothing is sent until you press Send.
+          </p>
+          <div class="actions" data-reveal style={delay(3)}>
+            <a class="btn primary" href={ragdoll.href}>
+              Get Ragdoll Mail
+              <ArrowUpRightIcon aria-hidden="true" />
+            </a>
+            <a class="btn" href={ragdoll.github}>
+              <Logo name="github" />
+              Source
+            </a>
+          </div>
+        </div>
+
+        <RagdollDemo client:load />
+
+        <div class="rag-grid">
+          <Card class="rag-term" step={0}>
+            <Terminal client:load />
+            <CardText text="Each reply is saved as a draft and checked. It goes out only after you say yes.">
+              Agents draft. You send.
+            </CardText>
+          </Card>
+          <Card class="rag-side" step={1}>
+            <SearchDemo client:load />
+            <CardText text="The index is on your own computer. Results show while you type, with no internet too.">
+              Search that finds the mail.
+            </CardText>
+          </Card>
+          <Card class="rag-side" step={2}>
+            <UndoSend client:load />
+            <CardText text="You have up to 30 seconds to take a mail back.">
+              Hard to send a mistake.
+            </CardText>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="work">
+      <div class="wrap">
+        <h2 class="display" data-reveal>
+          More things <em>I made</em>.
+        </h2>
+        <div class="work-grid">
+          <Card class="work-tavern" href={tavern.href} step={0} tilt>
+            <img
+              alt="The Drunken Dragon title screen: a dwarf, an elf, a goblin, a wizard, a bard and a red dragon at a poker table in a tavern"
+              class="shot"
+              decoding="async"
+              height="1000"
+              loading="lazy"
+              src="/static/home/tavern.webp"
+              style="color:transparent"
+              width="1600"
+            />
+            <CardText arrow text={tavern.description}>
+              {tavern.title}
+            </CardText>
+          </Card>
+          <Card class="work-anatomy" href={anatomy.href} step={1} tilt>
+            <img
+              alt="A tap changer shown as a 3D model, with its parts in different colours"
+              class="shot"
+              decoding="async"
+              height="1030"
+              loading="lazy"
+              src="/static/home/anatomy.webp"
+              style="color:transparent"
+              width="800"
+            />
+            <CardText arrow text={anatomy.description}>
+              {anatomy.title}
+            </CardText>
+          </Card>
+          <Card class="work-tuyi" step={0}>
+            <div class="visual">
+              <TuyiDrawing client:load />
+            </div>
+            <CardText text={tuyi.description}>{tuyi.title}</CardText>
+          </Card>
+          <Card class="work-selector" href={selector.href} step={1}>
+            <div class="visual">
+              <TypeCode client:load />
+            </div>
+            <CardText arrow text={selector.description}>
+              {selector.title}
+            </CardText>
+          </Card>
+          <Card class="work-typebooks" href={typebooks.href} step={0}>
+            <div class="visual">
+              <TypingBook client:load />
+            </div>
+            <CardText arrow text={typebooks.description}>
+              {typebooks.title}
+            </CardText>
+          </Card>
+          <Card class="work-words" href={words.href} step={1}>
+            <div class="visual">
+              <div aria-hidden="true" class="days">
+                {Array.from({ length: 28 }, (_, day) => (
+                  <i
+                    class={
+                      day < DAYS_DONE
+                        ? 'done'
+                        : day === DAYS_DONE
+                          ? 'today'
+                          : ''
+                    }
+                    style={{ '--i': day }}
+                  >
+                    {day < DAYS_DONE && <CheckIcon />}
+                  </i>
+                ))}
+              </div>
+            </div>
+            <CardText arrow text={words.description}>
+              {words.title}
+            </CardText>
+          </Card>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="contact" id="contact">
+    <div class="wrap">
+      <div aria-hidden="true" class="contact-sphere" data-sphere></div>
+      <h2 class="display" data-reveal>
+        Say <em>hello</em>.
+      </h2>
+      <a class="mail" data-reveal href={`mailto:${EMAIL}`} style={delay(1)}>
+        {EMAIL}
+      </a>
+      <div class="foot">
+        <p>“What invisible creates visible.”</p>
+        <ul>
+          <li>
+            <a aria-label="GitHub" href={GITHUB}>
+              <Logo name="github" />
+            </a>
+          </li>
+          <li>
+            <a aria-label="LinkedIn" href={LINKEDIN}>
+              <Logo name="linkedin" />
+            </a>
+          </li>
+          <li>
+            <a aria-label="Email" href={`mailto:${EMAIL}`}>
+              <Logo name="mail" />
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</Base>

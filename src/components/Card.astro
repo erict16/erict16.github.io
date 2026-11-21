@@ -1,0 +1,23 @@
+---
+// A card that fades in on scroll. `glow` cards light up under the pointer;
+// `tilt` cards also lean toward it. With `href`, the whole card is a link.
+interface Props {
+  class: string;
+  href?: string;
+  step: number;
+  tilt?: boolean;
+}
+
+const { class: className, href, step, tilt = false } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  class={`card ${className}`}
+  data-reveal
+  data-spot={tilt ? 'tilt' : 'glow'}
+  href={href}
+  style={{ '--d': `${step * 90}ms` }}
+>
+  <slot />
+</Tag>

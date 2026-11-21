@@ -1,0 +1,102 @@
+---
+import '@/styles/global.css';
+import { SITE_URL } from '@/lib/site';
+
+interface Props {
+  noindex?: boolean;
+  title?: string;
+}
+
+const { noindex = false, title } = Astro.props;
+
+const NAME = 'Eric Tan';
+const DESCRIPTION =
+  'Eric Tan, full-stack dev. I build small tools that do one job well. Maker of Ragdoll Mail, the mail app your AI agent can use.';
+const OG_IMAGE = `${SITE_URL}/static/images/og.png`;
+const pageTitle = title ? `${title} | ${NAME}` : NAME;
+const url = new URL(Astro.url.pathname, SITE_URL).href;
+
+// Only the Latin files are fetched early; the other scripts load if needed.
+const PRELOAD = [
+  'fraunces-latin.woff2',
+  'jetbrains-mono-latin.woff2',
+  'fraunces-latin-italic.woff2',
+  'inter-latin.woff2',
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {PRELOAD.map((file) => (
+      <link
+        as="font"
+        crossorigin=""
+        href={`/fonts/${file}`}
+        rel="preload"
+        type="font/woff2"
+      />
+    ))}
+    <title>{pageTitle}</title>
+    <meta name="description" content={DESCRIPTION} />
+    <link rel="author" href={SITE_URL} />
+    <meta name="author" content={NAME} />
+    <link
+      rel="manifest"
+      href={`${SITE_URL}/static/favicons/site.webmanifest`}
+    />
+    <meta
+      name="keywords"
+      content="Eric Tan,Ragdoll Mail,full-stack developer,OLTC"
+    />
+    <meta name="theme-color" content="#0f0d0b" />
+    <meta name="creator" content={NAME} />
+    <meta name="publisher" content={NAME} />
+    {noindex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        <meta name="robots" content="index, follow" />
+        <meta
+          name="googlebot"
+          content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+        />
+      </>
+    )}
+    <meta property="og:title" content={NAME} />
+    <meta property="og:description" content={DESCRIPTION} />
+    <meta property="og:url" content={url} />
+    <meta property="og:site_name" content={NAME} />
+    <meta property="og:locale" content="en-US" />
+    <meta property="og:image:alt" content={NAME} />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image" content={OG_IMAGE} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={NAME} />
+    <meta name="twitter:description" content={DESCRIPTION} />
+    <meta name="twitter:image:alt" content={NAME} />
+    <meta name="twitter:image:height" content="630" />
+    <meta name="twitter:image" content={OG_IMAGE} />
+    <meta name="twitter:image:width" content="1200" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16" />
+  </head>
+  <body>
+    <a class="skip" href="#main-content">
+      Skip to main content
+    </a>
+    <canvas aria-hidden="true" class="fx-canvas" data-fx></canvas>
+    <slot />
+    <script>
+      import { startEffects } from '@/scripts/effects';
+      import { startParticles } from '@/scripts/particles';
+
+      const canvas = document.querySelector<HTMLCanvasElement>('[data-fx]');
+      if (canvas) startParticles(canvas);
+      startEffects();
+    </script>
+  </body>
+</html>

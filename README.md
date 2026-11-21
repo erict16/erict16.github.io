@@ -8,7 +8,8 @@
 
 <p align="center">
   <a href="https://github.com/erict16/erict16.github.io/actions/workflows/pages.yml"><img src="https://github.com/erict16/erict16.github.io/actions/workflows/pages.yml/badge.svg" alt="Deploy"></a>
-  <img src="https://img.shields.io/badge/Next.js-13-0f0d0b?logo=nextdotjs" alt="Next.js 13">
+  <img src="https://img.shields.io/badge/Astro-6-0f0d0b?logo=astro" alt="Astro 6">
+  <img src="https://img.shields.io/badge/Tailwind%20CSS-4-0f0d0b?logo=tailwindcss" alt="Tailwind CSS 4">
   <img src="https://img.shields.io/badge/WebGL-no%20libraries-2f7671" alt="WebGL, no libraries">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-0f0d0b" alt="MIT license"></a>
 </p>
@@ -44,32 +45,32 @@
 
 ## Run it
 
-You need Node.js 20 and pnpm.
+You need Node.js 22 and pnpm.
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Then open http://localhost:3000. To check the real build, run `pnpm build` and open `out/index.html` through any static server.
+Then open http://localhost:4321. To check the real build, run `pnpm build`, then `pnpm preview`.
 
 ## Change something
 
-| To change                      | Edit                                                                             |
-| ------------------------------ | -------------------------------------------------------------------------------- |
-| Project names, texts, links    | `data/projects.ts`                                                               |
-| The page itself                | `app/page.tsx`                                                                   |
-| Colours, type, layout          | `app/globals.css` (the colours are at the top)                                   |
-| The points                     | `ui/Particles.tsx`                                                               |
-| A live demo in a card          | `ui/Terminal.tsx`, `SearchDemo.tsx`, `UndoSend.tsx`, `TuyiDrawing.tsx`, and more |
-| Scroll reveal, tilt and glow   | `ui/Effects.tsx`                                                                 |
-| Title, description, share card | `app/layout.tsx` and `public/static/images/og.png`                               |
+| To change                      | Edit                                                                         |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| Project names, texts, links    | `src/data/projects.ts`                                                       |
+| The page itself                | `src/pages/index.astro`                                                      |
+| Colours, type, layout          | `src/styles/global.css` (the colours are at the top)                         |
+| The points                     | `src/scripts/particles.ts`                                                   |
+| A live demo in a card          | `src/components/Terminal.tsx`, `SearchDemo.tsx`, `TuyiDrawing.tsx`, and more |
+| Scroll reveal, tilt and glow   | `src/scripts/effects.ts`                                                     |
+| Title, description, share card | `src/layouts/Base.astro` and `public/static/images/og.png`                   |
 
-Before you push, run `pnpm lint` and `pnpm lint:format`.
+Before you push, run `pnpm lint`, `pnpm lint:format` and `pnpm check`.
 
 ## Publish
 
-GitHub Pages cannot run a Node server, so the site is built as static files (`output: 'export'`). Push to `main`, and [the workflow](.github/workflows/pages.yml) builds `out/` and publishes it to [erict16.github.io](https://erict16.github.io/).
+The site is built with [Astro](https://astro.build) as plain static files. The page is Astro; the small live demos are React parts that start in the browser; the styles use [Tailwind CSS](https://tailwindcss.com). Push to `main`, and [the workflow](.github/workflows/pages.yml) builds `dist/` and publishes it to [erict16.github.io](https://erict16.github.io/).
 
 ## License
 

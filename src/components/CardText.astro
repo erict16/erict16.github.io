@@ -1,0 +1,18 @@
+---
+import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
+
+interface Props {
+  arrow?: boolean;
+  text: string;
+}
+
+const { arrow = false, text } = Astro.props;
+---
+
+<div class="card-text">
+  <h3>
+    <slot />
+    {arrow && <ArrowUpRightIcon aria-hidden="true" />}
+  </h3>
+  <p>{text}</p>
+</div>
