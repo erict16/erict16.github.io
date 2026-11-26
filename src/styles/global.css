@@ -668,67 +668,40 @@ main,
   position: relative;
   z-index: 2;
   margin-top: auto;
-  padding: 22px 26px 26px;
-}
-
-.card-text.has-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.card-copy {
-  min-width: 0;
-  flex: 1;
+  padding: 20px 28px 28px;
 }
 
 .card-text h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.015em;
   line-height: 1.3;
 }
 
-.card-text p {
-  max-width: 60ch;
-  margin-top: 6px;
-  color: var(--text-2);
-  font-size: 14.5px;
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-
-.card-go {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  flex: none;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: rgba(243, 236, 226, 0.03);
-  color: var(--text-3);
-  place-items: center;
-  transition:
-    background 0.25s,
-    border-color 0.25s,
-    color 0.25s;
-}
-
-.card-go svg {
+.card-text h3 svg {
   width: 16px;
   height: 16px;
-  transition: transform 0.25s var(--ease);
+  color: var(--text-3);
+  transition:
+    color 0.25s,
+    transform 0.25s var(--ease);
 }
 
-.card:hover .card-go {
-  border-color: rgba(108, 189, 181, 0.5);
-  background: rgba(108, 189, 181, 0.12);
+.card:hover .card-text h3 svg {
   color: var(--teal);
+  transform: translate(3px, -3px);
 }
 
-.card:hover .card-go svg {
-  transform: translate(2px, -2px);
+.card-text p {
+  max-width: 66ch;
+  margin-top: 6px;
+  color: var(--text-2);
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .rag-grid,
@@ -1133,8 +1106,7 @@ main,
 }
 
 .work-tavern .card-text {
-  align-items: flex-end;
-  padding: 96px 30px 28px;
+  padding: 96px 28px 28px;
   background: linear-gradient(transparent, rgba(12, 9, 7, 0.92) 60%);
 }
 
@@ -1156,22 +1128,8 @@ main,
 }
 
 .work-anatomy .card-text {
-  align-items: flex-end;
-  padding: 76px 26px 28px;
+  padding: 76px 28px 28px;
   background: linear-gradient(transparent, #1b1b1e 55%);
-}
-
-.work-words .card-text,
-.work-selector .card-text,
-.work-tuyi .card-text,
-.work-typebooks .card-text {
-  border-top: 1px solid var(--line);
-  background: rgba(243, 236, 226, 0.015);
-}
-
-.work-selector .card-text,
-.work-tuyi .card-text {
-  padding: 24px 30px 26px;
 }
 
 .visual {
@@ -2043,16 +2001,9 @@ html:not(.js) .tuyi-dot {
   }
 
   .card-text,
-  .work-selector .card-text,
-  .work-tuyi .card-text,
   .work-tavern .card-text,
   .work-anatomy .card-text {
     padding: 18px 20px 22px;
-  }
-
-  .card-go {
-    width: 34px;
-    height: 34px;
   }
 
   .work-tuyi .visual {

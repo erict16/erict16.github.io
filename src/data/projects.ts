@@ -32,7 +32,7 @@ export const projects = {
   },
   typebooks: {
     description:
-      'Retype 75+ classic books page by page — or import your own EPUB. Track WPM, accuracy, and level up as you read.',
+      'Retype 75+ classic books page by page, or import your own EPUB. Track WPM and accuracy.',
     href: 'https://typebooks.vercel.app',
     title: 'TypeBooks',
   },
