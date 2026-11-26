@@ -81,6 +81,7 @@
 }
 
 html {
+  overflow-x: clip;
   background: var(--bg);
   scroll-behavior: smooth;
   scroll-padding-top: 72px;
@@ -1055,6 +1056,18 @@ main,
 
 .work-tuyi {
   grid-column: span 7;
+  background:
+    radial-gradient(
+      520px 240px at 18% 10%,
+      rgba(56, 152, 255, 0.11),
+      transparent 70%
+    ),
+    radial-gradient(
+      400px 220px at 88% 88%,
+      rgba(53, 194, 122, 0.08),
+      transparent 70%
+    ),
+    var(--card);
 }
 
 .work-typebooks {
@@ -1510,204 +1523,233 @@ main,
   font-weight: 500;
 }
 
+/* Tuyi desktop workbench */
 .work-tuyi .visual {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   height: auto;
-  min-height: 216px;
-  padding-bottom: 0;
+  min-height: 268px;
+  padding: 24px 24px 18px;
+  border-bottom: 1px solid var(--line);
 }
 
-.tuyi-hud {
+.tuyi-app {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #0d1118;
+  box-shadow:
+    0 18px 40px -24px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.tuyi-bar {
+  display: flex;
+  align-items: center;
   gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.025);
 }
 
-.tuyi-file,
-.tuyi-pair {
-  color: var(--text-3);
-  font-family: var(--mono);
-  font-size: 12.5px;
-}
-
-.tuyi-prefix {
-  display: inline-block;
-  color: var(--teal);
-  animation: tuyi-in 0.45s var(--ease) both;
-}
-
-.tuyi-pair {
+.tuyi-dots {
   display: flex;
-  align-items: baseline;
   gap: 6px;
+}
+
+.tuyi-dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(243, 232, 215, 0.16);
+}
+
+.tuyi-filechip {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 9px 3px 5px;
+  border: 1px solid rgba(96, 165, 250, 0.28);
+  border-radius: 7px;
+  background: rgba(56, 152, 255, 0.1);
+  font-family: var(--mono);
+  font-size: 11.5px;
+}
+
+.tuyi-ext {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(56, 152, 255, 0.22);
+  color: #7cc4ff;
+  font-size: 9.5px;
+  font-weight: 600;
   letter-spacing: 0.04em;
 }
 
-.tuyi-pair i {
-  font-style: normal;
+.tuyi-filechip b {
+  overflow: hidden;
+  color: #e8eef7;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.tuyi-pair b {
-  display: inline-block;
+.tuyi-dir {
+  margin-left: auto;
+  color: #7cc4ff;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.tuyi-banner {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 10px 12px 6px;
+  padding: 7px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-2);
+  font-family: var(--mono);
+  font-size: 11px;
+  transition:
+    border-color 0.35s,
+    background 0.35s,
+    color 0.35s;
+}
+
+.tuyi-banner-bar {
+  width: 2.5px;
+  height: 13px;
+  flex: none;
+  border-radius: 2px;
+  background: #60a5fa;
+  transition: background 0.35s;
+}
+
+.tuyi-banner.done {
+  border-color: rgba(53, 194, 122, 0.38);
+  background: rgba(53, 194, 122, 0.09);
+  color: #bbf7d0;
+}
+
+.tuyi-banner.done .tuyi-banner-bar {
+  background: var(--green);
+}
+
+.tuyi-banner b {
+  color: #fff;
+  font-weight: 600;
+}
+
+.tuyi-table {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin: 2px 12px 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.tuyi-thead,
+.tuyi-row {
+  display: grid;
+  align-items: center;
+  gap: 10px;
+  grid-template-columns: 16px minmax(0, 1fr) minmax(0, 1.35fr) auto;
+  padding: 6px 11px;
+}
+
+.tuyi-thead {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--text-3);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.tuyi-tbody {
+  display: flex;
+  flex-direction: column;
+}
+
+.tuyi-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 12.5px;
+  transition: background 0.25s;
+}
+
+.tuyi-row:last-child {
+  border-bottom: 0;
+}
+
+.tuyi-row.active {
+  background: rgba(56, 152, 255, 0.14);
+}
+
+.tuyi-check {
+  display: grid;
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  place-items: center;
+  transition:
+    background 0.25s,
+    border-color 0.25s;
+}
+
+.tuyi-row.done .tuyi-check {
+  border-color: #3b82f6;
+  background: #3b82f6;
+  color: #fff;
+}
+
+.tuyi-check svg {
+  width: 10px;
+  height: 10px;
+}
+
+.tuyi-src,
+.tuyi-dst {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tuyi-src {
+  color: #e8eef7;
+  font-weight: 500;
+}
+
+.tuyi-dst {
   color: var(--teal);
   font-weight: 500;
-  animation: tuyi-in 0.45s var(--ease) both;
 }
 
-@keyframes tuyi-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
+.tuyi-row.active .tuyi-dst {
+  color: #7cc4ff;
 }
 
-.tuyi svg {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
-.tuyi-sheet {
-  position: relative;
-  margin-top: 10px;
-}
-
-/* the CAD grid behind the drawing, fading out at the edges */
-.tuyi-sheet::before {
-  position: absolute;
-  inset: -14px -26px;
-  background-image:
-    linear-gradient(rgba(108, 189, 181, 0.13) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(108, 189, 181, 0.13) 1px, transparent 1px),
-    linear-gradient(rgba(108, 189, 181, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(108, 189, 181, 0.06) 1px, transparent 1px);
-  background-position: center;
-  background-size:
-    100px 100px,
-    100px 100px,
-    20px 20px,
-    20px 20px;
-  content: '';
-  -webkit-mask-image: radial-gradient(closest-side, #000 40%, transparent);
-  mask-image: radial-gradient(closest-side, #000 40%, transparent);
-  pointer-events: none;
-}
-
-.tuyi-lines {
-  fill: none;
-  stroke: rgba(243, 232, 215, 0.38);
-  stroke-width: 1.2;
-}
-
-.tuyi-lines rect,
-.tuyi-lines line {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  transition:
-    stroke-dashoffset 1.8s var(--ease),
-    stroke 0.6s;
-}
-
-.tuyi.on .tuyi-lines rect,
-.tuyi.on .tuyi-lines line {
-  stroke-dashoffset: 0;
-}
-
-.tuyi.done .tuyi-lines {
-  stroke: rgba(108, 189, 181, 0.6);
-}
-
-.tuyi-lines .tuyi-dot {
-  fill: rgba(214, 165, 123, 0.6);
-  stroke: none;
-  opacity: 0;
-  transition: opacity 0.6s 0.9s;
-}
-
-.tuyi.on .tuyi-dot {
-  opacity: 1;
-}
-
-.tuyi-lines .tuyi-frame,
-.tuyi-lines .tuyi-dim {
-  stroke: rgba(243, 232, 215, 0.22);
-}
-
-.tuyi-num {
-  fill: var(--text-3);
+.tuyi-layer {
+  color: var(--text-3);
   font-family: var(--mono);
   font-size: 10px;
-}
-
-.tuyi-scan {
-  filter: drop-shadow(0 0 6px var(--teal));
-}
-
-.tuyi-label polyline {
-  fill: none;
-  stroke: rgba(108, 189, 181, 0.5);
-  stroke-width: 1;
-}
-
-.tuyi-label circle {
-  fill: var(--teal);
-}
-
-.tuyi-label text {
-  fill: var(--text);
-  font-family: var(--sans);
-  font-size: 13px;
-  transition:
-    fill 0.6s,
-    filter 0.6s;
-}
-
-.tuyi-label.live text {
-  fill: var(--teal);
-  font-family: var(--mono);
-}
-
-.tuyi-label.flash text {
-  fill: #c9f2ed;
-  filter: drop-shadow(0 0 8px var(--teal));
-}
-
-.tuyi-label .tuyi-ping {
-  fill: none;
-  stroke: var(--teal);
-  stroke-width: 1.2;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: tuyi-ping 0.7s var(--ease) both;
-}
-
-@keyframes tuyi-ping {
-  from {
-    opacity: 1;
-    transform: scale(0.2);
-  }
-  to {
-    opacity: 0;
-    transform: scale(1.5);
-  }
-}
-
-.tuyi-model {
-  fill: var(--text-3);
-  font-family: var(--mono);
-  font-size: 12px;
-}
-
-/* Without script, show the drawing as it ends up. */
-html:not(.js) .tuyi-lines rect,
-html:not(.js) .tuyi-lines line {
-  stroke-dashoffset: 0;
-}
-
-html:not(.js) .tuyi-dot {
-  opacity: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .days {
@@ -1755,7 +1797,7 @@ html:not(.js) .tuyi-dot {
 /* ---- contact */
 .contact {
   overflow: clip;
-  padding: clamp(110px, 14vw, 180px) 0 40px;
+  padding: clamp(120px, 15vw, 196px) 0 38px;
 }
 
 .contact-main {
@@ -1804,8 +1846,8 @@ html:not(.js) .tuyi-dot {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  margin-top: clamp(80px, 10vw, 136px);
-  padding-top: 28px;
+  margin-top: clamp(52px, 5.5vw, 76px);
+  padding-top: 26px;
   border-top: 1px solid var(--line);
   color: var(--text-3);
 }
@@ -1914,20 +1956,112 @@ html:not(.js) .tuyi-dot {
     display: none;
   }
 
+  .work-selector .visual,
+  .work-typebooks .visual {
+    min-height: 0;
+    padding: 20px 18px 16px;
+  }
+
+  .oltc {
+    gap: 14px;
+  }
+
   .oltc-cli {
     display: none;
   }
 
-  .tuyi-label text {
-    font-size: 17px;
+  .oltc-basis {
+    font-size: 11.5px;
   }
 
-  .tuyi-model {
-    font-size: 14px;
+  .oltc-plate {
+    justify-content: center;
+    padding: 14px 10px 12px;
+    gap: 1px;
+  }
+
+  .oltc-seg {
+    padding: 2px 1.5px;
+  }
+
+  .oltc-code,
+  .oltc-sep {
+    font-size: clamp(14px, 4vw, 18px);
+  }
+
+  .oltc-tag {
+    font-size: 9px;
+  }
+
+  .oltc-means {
+    font-size: 13.5px;
+  }
+
+  .tb {
+    gap: 12px;
+  }
+
+  .tb-page {
+    padding: 16px 16px 14px;
+    gap: 12px;
+  }
+
+  .tb-page-head {
+    font-size: 10.5px;
+  }
+
+  .book {
+    font-size: 16px;
+  }
+
+  .tb-hud {
+    flex-wrap: wrap;
+    gap: 8px 14px;
+  }
+
+  .work-words .visual {
+    min-height: 0;
+    padding: 24px 18px 12px;
+  }
+
+  .card-text {
+    padding: 18px 20px 22px;
+  }
+
+  .work-tuyi .visual {
+    min-height: 0;
+    padding: 18px 16px 14px;
+  }
+
+  .tuyi-thead,
+  .tuyi-row {
+    grid-template-columns: 16px minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: 8px;
+    padding: 6px 9px;
+    font-size: 12px;
+  }
+
+  .tuyi-col-layer,
+  .tuyi-layer {
+    display: none;
+  }
+
+  .tuyi-banner {
+    font-size: 10.5px;
+  }
+
+  .tuyi-dots {
+    display: none;
   }
 
   .card {
     border-radius: 18px;
+  }
+
+  .foot {
+    flex-wrap: wrap;
+    margin-top: 56px;
+    gap: 14px 20px;
   }
 }
 

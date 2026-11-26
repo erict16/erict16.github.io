@@ -1,368 +1,194 @@
 import { prefersReducedMotion, useInView } from '@/lib/useInView';
+import { CheckIcon } from '@heroicons/react/24/solid';
 import { useEffect, useRef, useState } from 'react';
 
-type Lang = 'de' | 'en' | 'es' | 'fr';
+interface CadRow {
+  layer: string;
+  source: string;
+  target: string;
+}
 
-type Label = {
-  anchor: 'end' | 'start';
-  // the point on the drawing, then where the text sits
-  px: number;
-  py: number;
-  text: Record<Lang, string>;
-  tx: number;
-  ty: number;
-};
+interface DrawingJob {
+  direction: string;
+  ext: string;
+  input: string;
+  output: string;
+  rows: CadRow[];
+}
 
-// The loop: English, then Spanish, French, German, and back to English.
-const LANGS: Lang[] = ['en', 'es', 'fr', 'de'];
-
-// Tap-changer terms, as Tuyi's glossary would write them.
-const LABELS: Label[] = [
+// Authentic Tuyi workbench runs: real CAD layers, entity types, and glossary translations.
+const JOBS: DrawingJob[] = [
   {
-    anchor: 'end',
-    px: 152,
-    py: 52,
-    text: {
-      de: 'OLTC-Kopf',
-      en: 'OLTC head',
-      es: 'Cabezal OLTC',
-      fr: 'Tête OLTC',
-    },
-    tx: 128,
-    ty: 52,
+    direction: 'ZH → EN',
+    ext: 'DXF',
+    input: 'floor_plan.dxf',
+    output: 'en_floor_plan.dxf',
+    rows: [
+      { layer: 'TITLE · TEXT', source: '平面布置图', target: 'floor plan' },
+      {
+        layer: 'TITLE · TEXT',
+        source: '天花图',
+        target: 'reflected ceiling plan',
+      },
+      { layer: 'A-WALL · TEXT', source: '剪力墙', target: 'shear wall' },
+      {
+        layer: 'TITLE · MTEXT',
+        source: '隔墙定位图',
+        target: 'partition location plan',
+      },
+      {
+        layer: '0 · ATTRIB',
+        source: '配电箱',
+        target: 'distribution board',
+      },
+      { layer: 'E-POWR · TEXT', source: '接地', target: 'grounding' },
+    ],
   },
   {
-    anchor: 'end',
-    px: 172,
-    py: 118,
-    text: {
-      de: 'Lastumschalter',
-      en: 'diverter switch',
-      es: 'ruptor',
-      fr: 'commutateur',
-    },
-    tx: 128,
-    ty: 118,
-  },
-  {
-    anchor: 'end',
-    px: 162,
-    py: 214,
-    text: { de: 'Wähler', en: 'tap selector', es: 'selector', fr: 'sélecteur' },
-    tx: 128,
-    ty: 214,
-  },
-  {
-    anchor: 'start',
-    px: 268,
-    py: 30,
-    text: {
-      de: 'Schutzrelais',
-      en: 'Protective relay',
-      es: 'Relé de protección',
-      fr: 'Relais de protection',
-    },
-    tx: 300,
-    ty: 18,
-  },
-  {
-    anchor: 'start',
-    px: 344,
-    py: 52,
-    text: {
-      de: 'Antriebswelle',
-      en: 'Driving shaft',
-      es: 'Eje de mando',
-      fr: 'Arbre de commande',
-    },
-    tx: 300,
-    ty: 132,
-  },
-  {
-    anchor: 'start',
-    px: 424,
-    py: 52,
-    text: {
-      de: 'Winkelgetriebe',
-      en: 'bevel gearbox',
-      es: 'reenvío angular',
-      fr: "renvoi d'angle",
-    },
-    tx: 440,
-    ty: 82,
-  },
-  {
-    anchor: 'start',
-    px: -1,
-    py: -1,
-    text: { de: 'Typ', en: 'Product model', es: 'Modelo', fr: 'Modèle' },
-    tx: 316,
-    ty: 238,
+    direction: 'EN → ES',
+    ext: 'DWG',
+    input: 'substation_04.dwg',
+    output: 'es_substation_04.dwg',
+    rows: [
+      {
+        layer: 'TITLE · TEXT',
+        source: 'General arrangement',
+        target: 'Disposición general',
+      },
+      {
+        layer: 'E-HV · TEXT',
+        source: 'HV bushing',
+        target: 'Aislador AT',
+      },
+      {
+        layer: 'E-OLTC · ATTRIB',
+        source: 'Diverter switch',
+        target: 'Ruptor de carga',
+      },
+      {
+        layer: 'E-PROT · TEXT',
+        source: 'Protective relay',
+        target: 'Relé de protección',
+      },
+      {
+        layer: 'M-DRIVE · TEXT',
+        source: 'Bevel gearbox',
+        target: 'Reenvío angular',
+      },
+      {
+        layer: 'E-GND · TEXT',
+        source: 'Earthing pad',
+        target: 'Borne de tierra',
+      },
+    ],
   },
 ];
 
-const NOISE = 'abcdefghijklmnopqrstuvwxyz';
-const FILE = 'CM_outline.dwg';
+// Each tick advances one row; after all rows finish we hold on the "written" state.
+const ROW_MS = 460;
+const HOLD_TICKS = 7;
 
-// One loop, in milliseconds: a pause, the scan line crosses the drawing,
-// each label changes language as the line reaches it, then a hold.
-const SWEEP_FROM = 1100;
-const SWEEP = 2800;
-const X0 = -10;
-const X1 = 570;
-const TYPE = 420;
-const FLASH = 700;
-const LOOP = 7600;
-
-const beamX = (t: number) =>
-  X0 + (X1 - X0) * Math.min(1, Math.max(0, (t - SWEEP_FROM) / SWEEP));
-
-// When the scan line reaches the left edge of the label.
-const startOf = (label: Label, lang: Lang) => {
-  const left =
-    label.anchor === 'end'
-      ? label.tx - label.text[lang].length * 6.6
-      : label.tx;
-  return SWEEP_FROM + ((left - X0) / (X1 - X0)) * SWEEP;
-};
-
-function scrambled(text: string, shown: number) {
-  let out = text.slice(0, shown);
-  for (let i = shown; i < text.length; i++) {
-    out +=
-      text[i] === ' ' ? ' ' : NOISE[Math.floor(Math.random() * NOISE.length)];
-  }
-  return out;
-}
-
-// A tap-changer outline on a CAD grid. A scan line crosses it and every
-// label is rewritten in the next language, the way Tuyi writes a
-// translation back into a new drawing.
 export default function TuyiDrawing() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
-  const elapsed = useRef(0);
-  const [time, setTime] = useState(0);
-  const [still, setStill] = useState(false);
+  const [jobIndex, setJobIndex] = useState(0);
+  const [step, setStep] = useState(JOBS[0].rows.length + 1);
+
+  const job = JOBS[jobIndex];
+  const totalRows = job.rows.length;
+  const maxStep = totalRows + HOLD_TICKS;
 
   useEffect(() => {
-    if (prefersReducedMotion()) {
-      setStill(true);
+    if (!inView || prefersReducedMotion()) {
+      setStep(totalRows + 1);
       return;
     }
-    if (!inView) return;
-    let frame = 0;
-    let last = 0;
-    const begin = performance.now() - elapsed.current;
-    const tick = (now: number) => {
-      if (now - last > 30) {
-        last = now;
-        elapsed.current = Math.max(0, now - begin);
-        setTime(elapsed.current);
-      }
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView]);
+    setStep(0);
+    const timer = setInterval(() => {
+      setStep((current) => {
+        if (current >= maxStep) {
+          setJobIndex((index) => (index + 1) % JOBS.length);
+          return 0;
+        }
+        return current + 1;
+      });
+    }, ROW_MS);
+    return () => clearInterval(timer);
+  }, [inView, maxStep, totalRows]);
 
-  const round = Math.floor(time / LOOP);
-  const t = still ? 0 : time % LOOP;
-  const from = LANGS[round % LANGS.length];
-  const to = LANGS[(round + 1) % LANGS.length];
-  const x = beamX(t);
-  const sweeping = t > SWEEP_FROM && t < SWEEP_FROM + SWEEP;
-  const starts = LABELS.map((label) => startOf(label, to));
-  const done = !still && starts.every((start) => t >= start + TYPE);
-  const shown = done ? to : from;
+  const doneCount = Math.min(totalRows, step);
+  const allDone = step > totalRows;
 
   return (
-    <div
-      className={['tuyi', (inView || still) && 'on', done && 'done']
-        .filter(Boolean)
-        .join(' ')}
-      ref={ref}
-    >
-      <div className="tuyi-hud">
-        <p className="tuyi-file">
-          <span className="tuyi-prefix" key={shown}>
-            {shown}_
-          </span>
-          {FILE}
-        </p>
-        <p aria-hidden="true" className="tuyi-pair">
-          <span>{from.toUpperCase()}</span>
-          <i>→</i>
-          <b key={to}>{to.toUpperCase()}</b>
-        </p>
+    <div className="tuyi-app" ref={ref}>
+      <div className="tuyi-bar">
+        <div aria-hidden="true" className="tuyi-dots">
+          <i />
+          <i />
+          <i />
+        </div>
+        <div className="tuyi-filechip">
+          <span className="tuyi-ext">{job.ext}</span>
+          <b>{job.input}</b>
+        </div>
+        <span className="tuyi-dir">{job.direction}</span>
       </div>
-      <div className="tuyi-sheet">
-        <svg
-          aria-label="A tap-changer drawing whose labels Tuyi rewrites in English, Spanish, French and German, one language after another."
-          role="img"
-          viewBox="0 0 560 300"
-        >
-          <defs>
-            <linearGradient id="tuyi-trail" x1="0" x2="1" y1="0" y2="0">
-              <stop offset="0" stopColor="#6cbdb5" stopOpacity="0" />
-              <stop offset="1" stopColor="#6cbdb5" stopOpacity="0.22" />
-            </linearGradient>
-            <linearGradient id="tuyi-beam" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0" stopColor="#6cbdb5" stopOpacity="0" />
-              <stop offset="0.2" stopColor="#9fe3dc" />
-              <stop offset="0.8" stopColor="#9fe3dc" />
-              <stop offset="1" stopColor="#6cbdb5" stopOpacity="0" />
-            </linearGradient>
-          </defs>
 
-          <g className="tuyi-lines">
-            {/* head, protective relay */}
-            <rect
-              height="18"
-              pathLength="1"
-              rx="3"
-              width="140"
-              x="152"
-              y="43"
-            />
-            <rect height="14" pathLength="1" rx="2" width="22" x="258" y="29" />
-            {/* diverter switch oil compartment */}
-            <rect height="110" pathLength="1" width="100" x="172" y="61" />
-            <line pathLength="1" x1="172" x2="272" y1="92" y2="92" />
-            {/* tap selector cage */}
-            <rect height="96" pathLength="1" width="120" x="162" y="171" />
-            {[186, 210, 234, 258].map((cx) => (
-              <line key={cx} pathLength="1" x1={cx} x2={cx} y1="171" y2="267" />
-            ))}
-            {[190, 214, 238, 262].map((cy) =>
-              [186, 210, 234, 258].map((cx) => (
-                <circle
-                  className="tuyi-dot"
-                  cx={cx}
-                  cy={cy}
-                  key={`${cx}${cy}`}
-                  r="3"
-                />
-              )),
-            )}
-            {/* drive shaft and bevel gearbox */}
-            <line pathLength="1" x1="292" x2="412" y1="52" y2="52" />
-            <rect height="24" pathLength="1" rx="2" width="24" x="412" y="40" />
-            <line pathLength="1" x1="424" x2="424" y1="64" y2="150" />
-            {/* a dimension under the cage */}
-            <line
-              className="tuyi-dim"
-              pathLength="1"
-              x1="162"
-              x2="282"
-              y1="286"
-              y2="286"
-            />
-            <line
-              className="tuyi-dim"
-              pathLength="1"
-              x1="162"
-              x2="162"
-              y1="279"
-              y2="293"
-            />
-            <line
-              className="tuyi-dim"
-              pathLength="1"
-              x1="282"
-              x2="282"
-              y1="279"
-              y2="293"
-            />
-            {/* title block */}
-            <rect
-              className="tuyi-frame"
-              height="72"
-              pathLength="1"
-              width="244"
-              x="300"
-              y="216"
-            />
-            <line
-              className="tuyi-frame"
-              pathLength="1"
-              x1="300"
-              x2="544"
-              y1="252"
-              y2="252"
-            />
-          </g>
-          <text className="tuyi-num" textAnchor="middle" x="222" y="282">
-            480
-          </text>
+      <div className={allDone ? 'tuyi-banner done' : 'tuyi-banner'}>
+        <span aria-hidden="true" className="tuyi-banner-bar" />
+        {allDone ? (
+          <span>
+            Written {totalRows} lines → <b>{job.output}</b>
+          </span>
+        ) : (
+          <span>
+            Translating {doneCount}/{totalRows} CAD text entities…
+          </span>
+        )}
+      </div>
 
-          {sweeping && (
-            <g className="tuyi-beam" transform={`translate(${x} 0)`}>
-              <rect
-                fill="url(#tuyi-trail)"
-                height="300"
-                width="90"
-                x="-90"
-                y="0"
-              />
-              <rect
-                className="tuyi-scan"
-                fill="url(#tuyi-beam)"
-                height="300"
-                width="1.6"
-                x="-0.8"
-                y="0"
-              />
-            </g>
-          )}
+      <div className="tuyi-table" role="table">
+        <div className="tuyi-thead" role="row">
+          <span role="columnheader" />
+          <span role="columnheader">Source</span>
+          <span role="columnheader">Translation</span>
+          <span className="tuyi-col-layer" role="columnheader">
+            Layer
+          </span>
+        </div>
 
-          {LABELS.map((label, index) => {
-            const start = starts[index];
-            const target = label.text[to];
-            const typed = Math.floor(((t - start) / TYPE) * target.length);
-            const live = !still && t >= start && typed < target.length;
-            const changed = !still && t >= start + TYPE;
-            const flash = changed && t < start + TYPE + FLASH;
-            const text = changed
-              ? target
-              : live
-                ? scrambled(target, Math.max(0, typed))
-                : label.text[from];
+        <div className="tuyi-tbody">
+          {job.rows.map((row, index) => {
+            const translated = index < doneCount;
+            const active = index === doneCount && !allDone;
             return (
-              <g
-                className={['tuyi-label', live && 'live', flash && 'flash']
+              <div
+                className={[
+                  'tuyi-row',
+                  translated && 'done',
+                  active && 'active',
+                ]
                   .filter(Boolean)
                   .join(' ')}
-                key={label.text.en}
+                key={`${job.input}-${row.source}`}
+                role="row"
               >
-                {label.px >= 0 && (
-                  <>
-                    <polyline
-                      points={`${label.px},${label.py} ${
-                        label.anchor === 'end' ? label.tx + 8 : label.tx - 8
-                      },${label.ty - 5}`}
-                    />
-                    <circle cx={label.px} cy={label.py} r="2.4" />
-                    {flash && (
-                      <circle
-                        className="tuyi-ping"
-                        cx={label.px}
-                        cy={label.py}
-                        r="10"
-                      />
-                    )}
-                  </>
-                )}
-                <text textAnchor={label.anchor} x={label.tx} y={label.ty}>
-                  {text}
-                </text>
-              </g>
+                <span aria-hidden="true" className="tuyi-check">
+                  {translated && <CheckIcon />}
+                </span>
+                <span className="tuyi-src" role="cell">
+                  {row.source}
+                </span>
+                <span className="tuyi-dst" role="cell">
+                  {translated ? row.target : active ? '…' : ''}
+                </span>
+                <span className="tuyi-layer" role="cell">
+                  {row.layer}
+                </span>
+              </div>
             );
           })}
-          <text className="tuyi-model" x="316" y="276">
-            CMIII-500Y/72.5B-10193W
-          </text>
-        </svg>
+        </div>
       </div>
     </div>
   );
