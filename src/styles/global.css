@@ -1058,13 +1058,13 @@ main,
   grid-column: span 7;
   background:
     radial-gradient(
-      520px 240px at 18% 10%,
-      rgba(56, 152, 255, 0.11),
+      520px 260px at 26% 18%,
+      rgba(108, 189, 181, 0.13),
       transparent 70%
     ),
     radial-gradient(
-      400px 220px at 88% 88%,
-      rgba(53, 194, 122, 0.08),
+      420px 240px at 84% 86%,
+      rgba(214, 165, 123, 0.08),
       transparent 70%
     ),
     var(--card);
@@ -1137,22 +1137,17 @@ main,
   padding: 26px 26px 6px;
 }
 
-/* OLTC Selector interactive instrument */
+/* OLTC Selector: one type string, read part by part */
 .work-selector .visual {
   position: relative;
   display: flex;
   flex: 1;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
   height: auto;
   min-height: 268px;
-  padding: 28px 28px 20px;
-  border-bottom: 1px solid var(--line);
-  background-image: radial-gradient(
-    rgba(243, 232, 215, 0.09) 1px,
-    transparent 1px
-  );
-  background-size: 20px 20px;
+  padding: clamp(32px, 4vw, 52px) clamp(28px, 4.5vw, 64px)
+    clamp(28px, 3.4vw, 40px);
 }
 
 .work-selector .card-text {
@@ -1163,38 +1158,28 @@ main,
   position: relative;
   z-index: 4;
   display: flex;
+  width: 100%;
+  max-width: 560px;
   flex-direction: column;
-  gap: 18px;
-}
-
-.oltc-head {
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.oltc-cli {
-  color: var(--text-3);
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: -0.01em;
+  gap: 22px;
+  text-align: center;
 }
 
 .oltc-basis {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  color: var(--text-2);
+  gap: 9px;
+  color: var(--text-3);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
   animation: rise 0.35s var(--ease) both;
 }
 
 .oltc-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   flex: none;
   border-radius: 50%;
   background: var(--teal);
@@ -1205,19 +1190,22 @@ main,
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: 2px;
-  padding: 18px 18px 14px;
+  justify-content: center;
+  gap: 3px;
+  padding: 22px 30px 16px;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  background: rgba(11, 10, 8, 0.78);
-  box-shadow: inset 0 1px 0 rgba(243, 232, 215, 0.04);
+  border-radius: 18px;
+  background: rgba(11, 10, 8, 0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(243, 232, 215, 0.04),
+    0 24px 48px -32px rgba(0, 0, 0, 0.9);
 }
 
 .oltc-sep {
   padding-top: 2px;
   color: var(--text-3);
   font-family: var(--mono);
-  font-size: clamp(19px, 2.2vw, 29px);
+  font-size: clamp(20px, 2.3vw, 30px);
   font-weight: 500;
   line-height: 1.15;
 }
@@ -1241,7 +1229,7 @@ main,
 .oltc-code {
   color: var(--text);
   font-family: var(--mono);
-  font-size: clamp(19px, 2.2vw, 29px);
+  font-size: clamp(20px, 2.3vw, 30px);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -1253,10 +1241,10 @@ main,
 .oltc-bracket {
   width: calc(100% - 4px);
   height: 6px;
-  margin-top: 6px;
-  border-right: 1.5px solid rgba(243, 232, 215, 0.22);
-  border-bottom: 1.5px solid rgba(243, 232, 215, 0.22);
-  border-left: 1.5px solid rgba(243, 232, 215, 0.22);
+  margin-top: 7px;
+  border-right: 1.5px solid rgba(243, 232, 215, 0.18);
+  border-bottom: 1.5px solid rgba(243, 232, 215, 0.18);
+  border-left: 1.5px solid rgba(243, 232, 215, 0.18);
   border-radius: 0 0 3px 3px;
   transition:
     border-color 0.3s,
@@ -1264,7 +1252,7 @@ main,
 }
 
 .oltc-tag {
-  margin-top: 5px;
+  margin-top: 6px;
   color: var(--text-3);
   font-family: var(--sans);
   font-size: 10.5px;
@@ -1288,60 +1276,11 @@ main,
 }
 
 .oltc-means {
-  min-height: 22px;
-  color: var(--text);
-  font-size: 14px;
-  font-weight: 500;
-  animation: rise 0.35s var(--ease) both;
-}
-
-.oltc-meters {
-  display: grid;
-  gap: 14px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  padding-top: 2px;
-}
-
-.oltc-meter {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.oltc-meter-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 6px;
-  font-size: 11.5px;
-}
-
-.oltc-meter-head span {
-  color: var(--text-3);
-}
-
-.oltc-meter-head b {
+  min-height: 24px;
   color: var(--text-2);
-  font-family: var(--mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.oltc-bar {
-  overflow: hidden;
-  height: 5px;
-  border-radius: 999px;
-  background: rgba(243, 232, 215, 0.09);
-}
-
-.oltc-bar i {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--teal), #9fe3dc);
-  transition: width 0.65s var(--ease);
+  font-size: 15px;
+  line-height: 1.5;
+  animation: rise 0.35s var(--ease) both;
 }
 
 /* TypeBooks interactive typing studio */
@@ -1523,233 +1462,288 @@ main,
   font-weight: 500;
 }
 
-/* Tuyi desktop workbench */
+/* Tuyi: a CAD sheet whose labels get rewritten in the next language */
 .work-tuyi .visual {
   display: flex;
   flex: 1;
   flex-direction: column;
   height: auto;
   min-height: 268px;
-  padding: 24px 24px 18px;
-  border-bottom: 1px solid var(--line);
+  padding: 24px 28px 16px;
 }
 
-.tuyi-app {
+.tuyi {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: #0d1118;
-  box-shadow:
-    0 18px 40px -24px rgba(0, 0, 0, 0.9),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  gap: 16px;
 }
 
-.tuyi-bar {
+.tuyi-hud {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 10px 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  background: rgba(255, 255, 255, 0.025);
 }
 
-.tuyi-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.tuyi-dots i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: rgba(243, 232, 215, 0.16);
-}
-
-.tuyi-filechip {
+.tuyi-file {
   display: inline-flex;
   min-width: 0;
   align-items: center;
+  gap: 8px;
+  padding: 4px 11px 4px 5px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(11, 10, 8, 0.6);
+  color: var(--text-2);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  white-space: nowrap;
+}
+
+.tuyi-file-tag {
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(108, 189, 181, 0.14);
+  color: var(--teal);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.tuyi-prefix {
+  display: inline-block;
+  color: var(--teal);
+  animation: tuyi-in 0.45s var(--ease) both;
+}
+
+.tuyi-pair {
+  display: inline-flex;
+  align-items: center;
   gap: 7px;
-  padding: 3px 9px 3px 5px;
-  border: 1px solid rgba(96, 165, 250, 0.28);
-  border-radius: 7px;
-  background: rgba(56, 152, 255, 0.1);
+  color: var(--text-3);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.tuyi-pair i {
+  font-style: normal;
+}
+
+.tuyi-pair b {
+  display: inline-block;
+  color: var(--teal);
+  font-weight: 600;
+  animation: tuyi-in 0.45s var(--ease) both;
+}
+
+.tuyi-count {
+  margin-left: 4px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+@keyframes tuyi-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+
+.tuyi-sheet {
+  position: relative;
+}
+
+/* the CAD grid behind the drawing, fading out at the edges */
+.tuyi-sheet::before {
+  position: absolute;
+  inset: -12px -28px;
+  background-image:
+    linear-gradient(rgba(108, 189, 181, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108, 189, 181, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(108, 189, 181, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108, 189, 181, 0.045) 1px, transparent 1px);
+  background-position: center;
+  background-size:
+    100px 100px,
+    100px 100px,
+    20px 20px,
+    20px 20px;
+  content: '';
+  -webkit-mask-image: radial-gradient(closest-side, #000 45%, transparent);
+  mask-image: radial-gradient(closest-side, #000 45%, transparent);
+  pointer-events: none;
+}
+
+.tuyi svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.tuyi-ticks {
+  fill: none;
+  stroke: rgba(108, 189, 181, 0.45);
+  stroke-linecap: round;
+  stroke-width: 1.2;
+}
+
+.tuyi-lines {
+  fill: none;
+  stroke: rgba(243, 232, 215, 0.4);
+  stroke-linecap: round;
+  stroke-width: 1.2;
+  transition: stroke 0.8s;
+}
+
+.tuyi-lines rect,
+.tuyi-lines line {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition:
+    stroke-dashoffset 1.8s var(--ease),
+    fill 0.8s;
+}
+
+.tuyi.on .tuyi-lines rect,
+.tuyi.on .tuyi-lines line {
+  stroke-dashoffset: 0;
+}
+
+.tuyi-lines .tuyi-body {
+  fill: rgba(243, 232, 215, 0.025);
+}
+
+.tuyi.done .tuyi-lines {
+  stroke: rgba(108, 189, 181, 0.62);
+}
+
+.tuyi.done .tuyi-lines .tuyi-body {
+  fill: rgba(108, 189, 181, 0.05);
+}
+
+.tuyi-lines .tuyi-dot {
+  fill: rgba(214, 165, 123, 0.65);
+  stroke: none;
+  opacity: 0;
+  transition: opacity 0.6s 0.9s;
+}
+
+.tuyi.on .tuyi-dot {
+  opacity: 1;
+}
+
+.tuyi-lines .tuyi-block,
+.tuyi-lines .tuyi-dim {
+  stroke: rgba(243, 232, 215, 0.2);
+}
+
+.tuyi-lines .tuyi-block {
+  fill: rgba(11, 10, 8, 0.5);
+}
+
+.tuyi-num {
+  fill: var(--text-3);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.tuyi-scan {
+  filter: drop-shadow(0 0 5px var(--teal));
+}
+
+.tuyi-label polyline {
+  fill: none;
+  stroke: rgba(108, 189, 181, 0.4);
+  stroke-width: 1;
+}
+
+.tuyi-pin {
+  fill: var(--card);
+  stroke: var(--teal);
+  stroke-width: 1.4;
+}
+
+.tuyi-label text {
+  fill: var(--text);
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.tuyi-label text.tuyi-new {
+  animation: tuyi-swap-in 0.6s var(--ease) both;
+}
+
+.tuyi-label text.tuyi-old {
+  animation: tuyi-swap-out 0.45s var(--ease) both;
+  pointer-events: none;
+}
+
+@keyframes tuyi-swap-in {
+  from {
+    fill: #c9f2ed;
+    filter: blur(4px);
+    opacity: 0;
+  }
+  45% {
+    fill: #c9f2ed;
+  }
+}
+
+@keyframes tuyi-swap-out {
+  to {
+    filter: blur(4px);
+    opacity: 0;
+  }
+}
+
+.tuyi-label .tuyi-ping {
+  fill: none;
+  stroke: var(--teal);
+  stroke-width: 1.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: tuyi-ping 0.7s var(--ease) both;
+}
+
+@keyframes tuyi-ping {
+  from {
+    opacity: 1;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+.tuyi-meta {
+  fill: var(--text-3);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+}
+
+.tuyi-model {
+  fill: var(--text-2);
   font-family: var(--mono);
   font-size: 11.5px;
 }
 
-.tuyi-ext {
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: rgba(56, 152, 255, 0.22);
-  color: #7cc4ff;
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+/* Without script, show the drawing as it ends up. */
+html:not(.js) .tuyi-lines rect,
+html:not(.js) .tuyi-lines line {
+  stroke-dashoffset: 0;
 }
 
-.tuyi-filechip b {
-  overflow: hidden;
-  color: #e8eef7;
-  font-weight: 500;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.tuyi-dir {
-  margin-left: auto;
-  color: #7cc4ff;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
-
-.tuyi-banner {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin: 10px 12px 6px;
-  padding: 7px 11px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--text-2);
-  font-family: var(--mono);
-  font-size: 11px;
-  transition:
-    border-color 0.35s,
-    background 0.35s,
-    color 0.35s;
-}
-
-.tuyi-banner-bar {
-  width: 2.5px;
-  height: 13px;
-  flex: none;
-  border-radius: 2px;
-  background: #60a5fa;
-  transition: background 0.35s;
-}
-
-.tuyi-banner.done {
-  border-color: rgba(53, 194, 122, 0.38);
-  background: rgba(53, 194, 122, 0.09);
-  color: #bbf7d0;
-}
-
-.tuyi-banner.done .tuyi-banner-bar {
-  background: var(--green);
-}
-
-.tuyi-banner b {
-  color: #fff;
-  font-weight: 600;
-}
-
-.tuyi-table {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  margin: 2px 12px 12px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.015);
-}
-
-.tuyi-thead,
-.tuyi-row {
-  display: grid;
-  align-items: center;
-  gap: 10px;
-  grid-template-columns: 16px minmax(0, 1fr) minmax(0, 1.35fr) auto;
-  padding: 6px 11px;
-}
-
-.tuyi-thead {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  background: rgba(255, 255, 255, 0.025);
-  color: var(--text-3);
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.tuyi-tbody {
-  display: flex;
-  flex-direction: column;
-}
-
-.tuyi-row {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  font-size: 12.5px;
-  transition: background 0.25s;
-}
-
-.tuyi-row:last-child {
-  border-bottom: 0;
-}
-
-.tuyi-row.active {
-  background: rgba(56, 152, 255, 0.14);
-}
-
-.tuyi-check {
-  display: grid;
-  width: 14px;
-  height: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 4px;
-  place-items: center;
-  transition:
-    background 0.25s,
-    border-color 0.25s;
-}
-
-.tuyi-row.done .tuyi-check {
-  border-color: #3b82f6;
-  background: #3b82f6;
-  color: #fff;
-}
-
-.tuyi-check svg {
-  width: 10px;
-  height: 10px;
-}
-
-.tuyi-src,
-.tuyi-dst {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.tuyi-src {
-  color: #e8eef7;
-  font-weight: 500;
-}
-
-.tuyi-dst {
-  color: var(--teal);
-  font-weight: 500;
-}
-
-.tuyi-row.active .tuyi-dst {
-  color: #7cc4ff;
-}
-
-.tuyi-layer {
-  color: var(--text-3);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
+html:not(.js) .tuyi-dot {
+  opacity: 1;
 }
 
 .days {
@@ -1941,10 +1935,6 @@ main,
     width: min(62vw, 290px);
     margin: 0 auto;
   }
-
-  .oltc-meters {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 600px) {
@@ -1956,18 +1946,18 @@ main,
     display: none;
   }
 
-  .work-selector .visual,
+  .work-selector .visual {
+    min-height: 0;
+    padding: 28px 16px 22px;
+  }
+
   .work-typebooks .visual {
     min-height: 0;
     padding: 20px 18px 16px;
   }
 
   .oltc {
-    gap: 14px;
-  }
-
-  .oltc-cli {
-    display: none;
+    gap: 16px;
   }
 
   .oltc-basis {
@@ -1975,8 +1965,7 @@ main,
   }
 
   .oltc-plate {
-    justify-content: center;
-    padding: 14px 10px 12px;
+    padding: 16px 12px 12px;
     gap: 1px;
   }
 
@@ -1994,7 +1983,7 @@ main,
   }
 
   .oltc-means {
-    font-size: 13.5px;
+    font-size: 14px;
   }
 
   .tb {
@@ -2030,27 +2019,22 @@ main,
 
   .work-tuyi .visual {
     min-height: 0;
-    padding: 18px 16px 14px;
+    padding: 20px 16px 12px;
   }
 
-  .tuyi-thead,
-  .tuyi-row {
-    grid-template-columns: 16px minmax(0, 1fr) minmax(0, 1.25fr);
-    gap: 8px;
-    padding: 6px 9px;
-    font-size: 12px;
-  }
-
-  .tuyi-col-layer,
-  .tuyi-layer {
+  .tuyi-count {
     display: none;
   }
 
-  .tuyi-banner {
-    font-size: 10.5px;
+  .tuyi-label text {
+    font-size: 17px;
   }
 
-  .tuyi-dots {
+  .tuyi-model {
+    font-size: 14px;
+  }
+
+  .tuyi-meta {
     display: none;
   }
 

@@ -1,12 +1,6 @@
 import { prefersReducedMotion, useInView } from '@/lib/useInView';
 import { useEffect, useRef, useState } from 'react';
 
-interface Metric {
-  label: string;
-  pct: number;
-  value: string;
-}
-
 interface Part {
   label?: string;
   means?: string;
@@ -17,94 +11,104 @@ interface DutyPreset {
   basis: string;
   code: string;
   id: string;
-  metrics: Metric[];
   parts: Part[];
 }
 
-// Three real duties from the OLTC Selector catalogue, with exact type codes,
-// segment meanings, and rating utilisation bars.
+const TAPS: Part = {
+  label: 'positions',
+  means: '19 positions, so it can raise or lower the voltage',
+  text: '10193W',
+};
+
+// Three real answers from the OLTC Selector, each part explained in plain words.
 const PRESETS: DutyPreset[] = [
   {
-    basis: '25 MVA · 110 kV · star neutral · ±8×1.25%',
+    basis: '25 MVA transformer · 110 kV',
     code: 'CV2III-350Y/72.5-10193W',
     id: 'power',
-    metrics: [
-      { label: 'Through-current', pct: 42, value: '145.8 / 350 A' },
-      { label: 'Step voltage', pct: 40, value: '793.9 / 2000 V' },
-      { label: 'Step capacity', pct: 17, value: '115.7 / 700 kVA' },
-    ],
     parts: [
-      { label: 'family', means: 'CV2 — Vacuum compound, in-tank', text: 'CV2' },
-      { label: 'phases', means: 'III — Three-phase unit', text: 'III' },
-      { text: '-' },
-      { label: 'A', means: '350 A — Rated through-current', text: '350' },
-      { label: 'star', means: 'Y — Star-point neutral end', text: 'Y' },
-      { text: '/' },
-      { label: 'Um kV', means: '72.5 kV — Insulation to earth', text: '72.5' },
-      { text: '-' },
       {
-        label: '19 pos',
-        means: '10193W — 19 positions, reversing',
-        text: '10193W',
+        label: 'type',
+        means: 'A vacuum tap changer that sits inside the tank',
+        text: 'CV2',
       },
+      {
+        label: 'phases',
+        means: 'One unit switches all three phases',
+        text: 'III',
+      },
+      { text: '-' },
+      { label: 'amps', means: 'Carries up to 350 amps', text: '350' },
+      {
+        label: 'wiring',
+        means: 'Fitted at the star point, the neutral end',
+        text: 'Y',
+      },
+      { text: '/' },
+      {
+        label: 'insulation',
+        means: 'Insulated for 72.5 kV to earth',
+        text: '72.5',
+      },
+      { text: '-' },
+      TAPS,
     ],
   },
   {
-    basis: '125 MVA · 225/115 kV · autotransformer · YNa0d11',
+    basis: '125 MVA autotransformer · 225 kV',
     code: '3xCM2I-500/252D-10193W',
     id: 'auto',
-    metrics: [
-      { label: 'Through-current', pct: 71, value: '356.4 / 500 A' },
-      { label: 'Step voltage', pct: 54, value: '1624 / 3000 V' },
-      { label: 'Step capacity', pct: 48, value: '578.8 / 1200 kVA' },
-    ],
     parts: [
       {
-        label: '3× unit',
-        means: '3xCM2 — Three single-phase combined vacuum units',
+        label: 'type',
+        means: 'Three single-phase vacuum tap changers, one per phase',
         text: '3xCM2',
       },
-      { label: 'phase', means: 'I — Single-phase pole', text: 'I' },
+      { label: 'phases', means: 'Each unit switches one phase', text: 'I' },
       { text: '-' },
-      { label: 'A', means: '500 A — Rated through-current', text: '500' },
+      { label: 'amps', means: 'Carries up to 500 amps', text: '500' },
       { text: '/' },
-      { label: 'Um kV', means: '252 kV — Line-end insulation', text: '252' },
-      { label: 'line', means: 'D — Line-end / series winding', text: 'D' },
-      { text: '-' },
       {
-        label: '19 pos',
-        means: '10193W — 19 positions, reversing',
-        text: '10193W',
+        label: 'insulation',
+        means: 'Insulated for 252 kV to earth',
+        text: '252',
       },
+      { label: 'wiring', means: 'Fitted at the line end', text: 'D' },
+      { text: '-' },
+      TAPS,
     ],
   },
   {
-    basis: '16 MVA · 22 kV · line end · star winding',
+    basis: '16 MVA transformer · 22 kV',
     code: 'CV2III-600D/40.5-10193W',
     id: 'line',
-    metrics: [
-      { label: 'Through-current', pct: 78, value: '466.5 / 600 A' },
-      { label: 'Step voltage', pct: 14, value: '275.0 / 2000 V' },
-      { label: 'Step capacity', pct: 18, value: '128.3 / 700 kVA' },
-    ],
     parts: [
-      { label: 'family', means: 'CV2 — Vacuum compound, in-tank', text: 'CV2' },
-      { label: 'phases', means: 'III — Three-phase unit', text: 'III' },
-      { text: '-' },
-      { label: 'A', means: '600 A — Rated through-current', text: '600' },
-      { label: 'delta', means: 'D — Line-end connection', text: 'D' },
-      { text: '/' },
-      { label: 'Um kV', means: '40.5 kV — Insulation to earth', text: '40.5' },
-      { text: '-' },
       {
-        label: '19 pos',
-        means: '10193W — 19 positions, reversing',
-        text: '10193W',
+        label: 'type',
+        means: 'A vacuum tap changer that sits inside the tank',
+        text: 'CV2',
       },
+      {
+        label: 'phases',
+        means: 'One unit switches all three phases',
+        text: 'III',
+      },
+      { text: '-' },
+      { label: 'amps', means: 'Carries up to 600 amps', text: '600' },
+      { label: 'wiring', means: 'Fitted at the line end', text: 'D' },
+      { text: '/' },
+      {
+        label: 'insulation',
+        means: 'Insulated for 40.5 kV to earth',
+        text: '40.5',
+      },
+      { text: '-' },
+      TAPS,
     ],
   },
 ];
 
+// The type string the selector gives, read one part at a time.
 export default function TypeCode() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
@@ -123,13 +127,13 @@ export default function TypeCode() {
     const timer = setInterval(() => {
       setTurn((value) => {
         const next = value + 1;
-        if (next > 0 && next % namedIndices.length === 0) {
+        if (next % namedIndices.length === 0) {
           setPresetIndex((current) => (current + 1) % PRESETS.length);
           return 0;
         }
         return next;
       });
-    }, 1500);
+    }, 1700);
     return () => clearInterval(timer);
   }, [inView, namedIndices.length, paused]);
 
@@ -148,19 +152,14 @@ export default function TypeCode() {
       }}
       ref={ref}
     >
-      <div className="oltc-head">
-        <p className="oltc-basis" key={preset.id}>
-          <span className="oltc-dot" />
-          {preset.basis}
-        </p>
-        <span className="oltc-cli">npx oltc-selector</span>
-      </div>
+      <p className="oltc-basis" key={preset.id}>
+        <span className="oltc-dot" />
+        {preset.basis}
+      </p>
 
       <div aria-label={preset.code} className="oltc-plate" role="group">
         {preset.parts.map((part, index) => {
-          const isNamed = Boolean(part.means);
-          const isOn = index === active;
-          if (!isNamed) {
+          if (!part.means) {
             return (
               <span aria-hidden="true" className="oltc-sep" key={index}>
                 {part.text}
@@ -169,7 +168,7 @@ export default function TypeCode() {
           }
           return (
             <button
-              className={isOn ? 'oltc-seg on' : 'oltc-seg'}
+              className={index === active ? 'oltc-seg on' : 'oltc-seg'}
               key={`${preset.id}-${index}`}
               onClick={() => setPinnedPart(index)}
               onFocus={() => setPinnedPart(index)}
@@ -187,20 +186,6 @@ export default function TypeCode() {
       <p className="oltc-means" key={`${preset.id}-${active}`}>
         {preset.parts[active]?.means}
       </p>
-
-      <div className="oltc-meters">
-        {preset.metrics.map((metric) => (
-          <div className="oltc-meter" key={metric.label}>
-            <div className="oltc-meter-head">
-              <span>{metric.label}</span>
-              <b>{metric.value}</b>
-            </div>
-            <div className="oltc-bar">
-              <i style={{ width: `${metric.pct}%` }} />
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

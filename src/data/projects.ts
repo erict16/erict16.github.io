@@ -13,7 +13,7 @@ export const projects = {
   },
   selector: {
     description:
-      'Transformer duty in. The smallest catalogue tap-changer type that covers it out — across 16 families, on the web, CLI, or via AI.',
+      'Give it a transformer’s size and voltage. It tells you which tap changer to order: the smallest one that does the job.',
     href: 'https://oltc-selector.vercel.app/',
     title: 'OLTC Selector',
   },
