@@ -1,52 +1,240 @@
 import { prefersReducedMotion, useInView } from '@/lib/useInView';
 import { useEffect, useRef, useState } from 'react';
 
-// The type string the selector gives for 25 MVA, 110 kV, tap changer at the
-// neutral end, with the meaning of each coded part.
-const PARTS = [
-  { means: 'Vacuum, compound', text: 'CV2' },
-  { means: 'Three phases', text: 'III' },
-  { text: '-' },
-  { means: '350 A through-current', text: '350' },
-  { means: 'Star connection', text: 'Y' },
-  { text: '/' },
-  { means: 'Um 72.5 kV', text: '72.5' },
-  { text: '-' },
-  { means: '19 positions, reversing', text: '10193W' },
-];
+interface Metric {
+  label: string;
+  pct: number;
+  value: string;
+}
 
-const NAMED = PARTS.flatMap((part, index) => (part.means ? [index] : []));
+interface Part {
+  label?: string;
+  means?: string;
+  text: string;
+}
+
+interface DutyPreset {
+  basis: string;
+  code: string;
+  duty: string;
+  id: string;
+  metrics: Metric[];
+  parts: Part[];
+  short: string;
+}
+
+// Three real duties from the OLTC Selector catalogue, with exact type codes,
+// segment meanings, and rating utilisation bars.
+const PRESETS: DutyPreset[] = [
+  {
+    basis: '25 MVA · 110 kV · star neutral · ±8×1.25%',
+    code: 'CV2III-350Y/72.5-10193W',
+    duty: 'Power transformer',
+    id: 'power',
+    metrics: [
+      { label: 'Through-current', pct: 42, value: '145.8 / 350 A' },
+      { label: 'Step voltage', pct: 40, value: '793.9 / 2000 V' },
+      { label: 'Step capacity', pct: 17, value: '115.7 / 700 kVA' },
+    ],
+    parts: [
+      { label: 'family', means: 'CV2 — Vacuum compound, in-tank', text: 'CV2' },
+      { label: 'phases', means: 'III — Three-phase unit', text: 'III' },
+      { text: '-' },
+      { label: 'A', means: '350 A — Rated through-current', text: '350' },
+      { label: 'star', means: 'Y — Star-point neutral end', text: 'Y' },
+      { text: '/' },
+      { label: 'Um kV', means: '72.5 kV — Insulation to earth', text: '72.5' },
+      { text: '-' },
+      {
+        label: '19 pos',
+        means: '10193W — 19 positions, reversing',
+        text: '10193W',
+      },
+    ],
+    short: '25 MVA · 110 kV',
+  },
+  {
+    basis: '125 MVA · 225/115 kV · autotransformer · YNa0d11',
+    code: '3xCM2I-500/252D-10193W',
+    duty: 'Autotransformer',
+    id: 'auto',
+    metrics: [
+      { label: 'Through-current', pct: 71, value: '356.4 / 500 A' },
+      { label: 'Step voltage', pct: 54, value: '1624 / 3000 V' },
+      { label: 'Step capacity', pct: 48, value: '578.8 / 1200 kVA' },
+    ],
+    parts: [
+      {
+        label: '3× unit',
+        means: '3xCM2 — Three single-phase combined vacuum units',
+        text: '3xCM2',
+      },
+      { label: 'phase', means: 'I — Single-phase pole', text: 'I' },
+      { text: '-' },
+      { label: 'A', means: '500 A — Rated through-current', text: '500' },
+      { text: '/' },
+      { label: 'Um kV', means: '252 kV — Line-end insulation', text: '252' },
+      { label: 'line', means: 'D — Line-end / series winding', text: 'D' },
+      { text: '-' },
+      {
+        label: '19 pos',
+        means: '10193W — 19 positions, reversing',
+        text: '10193W',
+      },
+    ],
+    short: '125 MVA · Auto',
+  },
+  {
+    basis: '16 MVA · 22 kV · line end · star winding',
+    code: 'CV2III-600D/40.5-10193W',
+    duty: 'Line-end duty',
+    id: 'line',
+    metrics: [
+      { label: 'Through-current', pct: 78, value: '466.5 / 600 A' },
+      { label: 'Step voltage', pct: 14, value: '275.0 / 2000 V' },
+      { label: 'Step capacity', pct: 18, value: '128.3 / 700 kVA' },
+    ],
+    parts: [
+      { label: 'family', means: 'CV2 — Vacuum compound, in-tank', text: 'CV2' },
+      { label: 'phases', means: 'III — Three-phase unit', text: 'III' },
+      { text: '-' },
+      { label: 'A', means: '600 A — Rated through-current', text: '600' },
+      { label: 'delta', means: 'D — Line-end connection', text: 'D' },
+      { text: '/' },
+      { label: 'Um kV', means: '40.5 kV — Insulation to earth', text: '40.5' },
+      { text: '-' },
+      {
+        label: '19 pos',
+        means: '10193W — 19 positions, reversing',
+        text: '10193W',
+      },
+    ],
+    short: '16 MVA · 22 kV',
+  },
+];
 
 export default function TypeCode() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref);
+  const [presetIndex, setPresetIndex] = useState(0);
   const [turn, setTurn] = useState(0);
+  const [pinnedPart, setPinnedPart] = useState<number | null>(null);
+  const [paused, setPaused] = useState(false);
+
+  const preset = PRESETS[presetIndex];
+  const namedIndices = preset.parts.flatMap((part, index) =>
+    part.means ? [index] : [],
+  );
 
   useEffect(() => {
-    if (!inView || prefersReducedMotion()) return;
-    const timer = setInterval(() => setTurn((value) => value + 1), 1500);
+    if (!inView || prefersReducedMotion() || paused) return;
+    const timer = setInterval(() => {
+      setTurn((value) => {
+        const next = value + 1;
+        if (next > 0 && next % namedIndices.length === 0) {
+          setPresetIndex((current) => (current + 1) % PRESETS.length);
+          return 0;
+        }
+        return next;
+      });
+    }, 1500);
     return () => clearInterval(timer);
-  }, [inView]);
+  }, [inView, namedIndices.length, paused]);
 
-  const active = NAMED[turn % NAMED.length];
+  const active =
+    pinnedPart !== null && preset.parts[pinnedPart]?.means
+      ? pinnedPart
+      : namedIndices[turn % namedIndices.length];
+
+  const selectPreset = (index: number) => {
+    setPresetIndex(index);
+    setTurn(0);
+    setPinnedPart(null);
+    setPaused(true);
+  };
 
   return (
-    <div className="code" ref={ref}>
-      <p className="code-duty">25 MVA · 110 kV · neutral end</p>
-      <p aria-label="CV2III-350Y/72.5-10193W" className="code-type">
-        {PARTS.map((part, index) => (
-          <span
-            aria-hidden="true"
-            className={index === active ? 'on' : part.means ? '' : 'dim'}
-            key={index}
-          >
-            {part.text}
-          </span>
+    <div
+      className="oltc"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => {
+        setPinnedPart(null);
+        setPaused(false);
+      }}
+      ref={ref}
+    >
+      <div className="oltc-top">
+        <div
+          aria-label="Example transformer duties"
+          className="oltc-tabs"
+          role="tablist"
+        >
+          {PRESETS.map((item, index) => (
+            <button
+              aria-selected={index === presetIndex}
+              className={index === presetIndex ? 'oltc-tab on' : 'oltc-tab'}
+              key={item.id}
+              onClick={() => selectPreset(index)}
+              role="tab"
+              type="button"
+            >
+              {item.short}
+            </button>
+          ))}
+        </div>
+        <span className="oltc-cli">npx oltc-selector</span>
+      </div>
+
+      <p className="oltc-basis" key={preset.id}>
+        <span className="oltc-dot" />
+        {preset.basis}
+      </p>
+
+      <div aria-label={preset.code} className="oltc-plate" role="group">
+        {preset.parts.map((part, index) => {
+          const isNamed = Boolean(part.means);
+          const isOn = index === active;
+          if (!isNamed) {
+            return (
+              <span aria-hidden="true" className="oltc-sep" key={index}>
+                {part.text}
+              </span>
+            );
+          }
+          return (
+            <button
+              className={isOn ? 'oltc-seg on' : 'oltc-seg'}
+              key={`${preset.id}-${index}`}
+              onClick={() => setPinnedPart(index)}
+              onFocus={() => setPinnedPart(index)}
+              onMouseEnter={() => setPinnedPart(index)}
+              type="button"
+            >
+              <span className="oltc-code">{part.text}</span>
+              <span aria-hidden="true" className="oltc-bracket" />
+              <span className="oltc-tag">{part.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      <p className="oltc-means" key={`${preset.id}-${active}`}>
+        {preset.parts[active]?.means}
+      </p>
+
+      <div className="oltc-meters">
+        {preset.metrics.map((metric) => (
+          <div className="oltc-meter" key={metric.label}>
+            <div className="oltc-meter-head">
+              <span>{metric.label}</span>
+              <b>{metric.value}</b>
+            </div>
+            <div className="oltc-bar">
+              <i style={{ width: `${metric.pct}%` }} />
+            </div>
+          </div>
         ))}
-      </p>
-      <p className="code-means" key={active}>
-        {PARTS[active].means}
-      </p>
+      </div>
     </div>
   );
 }

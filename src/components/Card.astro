@@ -1,23 +1,37 @@
 ---
 // A card that fades in on scroll. `glow` cards light up under the pointer;
 // `tilt` cards also lean toward it. With `href`, the whole card is a link.
+// When `interactive` is true, a stretched link covers the card while inner
+// controls can sit above it without nesting buttons inside an anchor.
 interface Props {
   class: string;
   href?: string;
+  interactive?: boolean;
+  label?: string;
   step: number;
   tilt?: boolean;
 }
 
-const { class: className, href, step, tilt = false } = Astro.props;
-const Tag = href ? 'a' : 'div';
+const {
+  class: className,
+  href,
+  interactive = false,
+  label,
+  step,
+  tilt = false,
+} = Astro.props;
+const Tag = href && !interactive ? 'a' : 'div';
 ---
 
 <Tag
   class={`card ${className}`}
   data-reveal
   data-spot={tilt ? 'tilt' : 'glow'}
-  href={href}
+  href={interactive ? undefined : href}
   style={{ '--d': `${step * 90}ms` }}
 >
+  {href && interactive && (
+    <a aria-label={label} class="card-cover" href={href} />
+  )}
   <slot />
 </Tag>

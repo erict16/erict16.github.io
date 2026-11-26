@@ -24,14 +24,14 @@ export default function RagdollDemo() {
     <div className="stage" data-stage ref={stage}>
       <div className="window">
         <video
-          aria-label="Ragdoll Mail: an AI agent writes a reply from the terminal, the draft opens in the app, the send is undone and set for tomorrow, and search finds mail as you type"
+          aria-label="Ragdoll Mail in use: an AI agent in a terminal saves a reply to Drafts with the ragdoll command, you read it in the app, the agent sends it when you say yes, it shows in Sent, and search finds mail as you type"
           loop
           muted={!sound}
           playsInline
-          poster="/static/home/ragdoll-demo.webp"
+          poster="/static/home/ragdoll-demo.webp?v=2"
           preload="none"
           ref={video}
-          src="/static/home/ragdoll-demo.mp4"
+          src="/static/home/ragdoll-demo.mp4?v=2"
         />
         <button
           aria-label={sound ? 'Turn sound off' : 'Turn sound on'}

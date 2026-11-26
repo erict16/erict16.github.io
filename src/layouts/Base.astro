@@ -93,10 +93,12 @@ const PRELOAD = [
     <script>
       import { startEffects } from '@/scripts/effects';
       import { startParticles } from '@/scripts/particles';
+      import { startGitHubStars } from '@/scripts/stars';
 
       const canvas = document.querySelector<HTMLCanvasElement>('[data-fx]');
       if (canvas) startParticles(canvas);
       startEffects();
+      startGitHubStars();
     </script>
   </body>
 </html>
