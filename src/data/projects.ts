@@ -31,7 +31,8 @@ export const projects = {
     title: 'Tuyi · DWG/DXF File Translator',
   },
   typebooks: {
-    description: 'Practice typing by retyping classic books.',
+    description:
+      'Retype 75+ classic books page by page — or import your own EPUB. Track WPM, accuracy, and level up as you read.',
     href: 'https://typebooks.vercel.app',
     title: 'TypeBooks',
   },
