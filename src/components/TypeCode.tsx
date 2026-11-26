@@ -16,11 +16,9 @@ interface Part {
 interface DutyPreset {
   basis: string;
   code: string;
-  duty: string;
   id: string;
   metrics: Metric[];
   parts: Part[];
-  short: string;
 }
 
 // Three real duties from the OLTC Selector catalogue, with exact type codes,
@@ -29,7 +27,6 @@ const PRESETS: DutyPreset[] = [
   {
     basis: '25 MVA · 110 kV · star neutral · ±8×1.25%',
     code: 'CV2III-350Y/72.5-10193W',
-    duty: 'Power transformer',
     id: 'power',
     metrics: [
       { label: 'Through-current', pct: 42, value: '145.8 / 350 A' },
@@ -51,12 +48,10 @@ const PRESETS: DutyPreset[] = [
         text: '10193W',
       },
     ],
-    short: '25 MVA · 110 kV',
   },
   {
     basis: '125 MVA · 225/115 kV · autotransformer · YNa0d11',
     code: '3xCM2I-500/252D-10193W',
-    duty: 'Autotransformer',
     id: 'auto',
     metrics: [
       { label: 'Through-current', pct: 71, value: '356.4 / 500 A' },
@@ -82,12 +77,10 @@ const PRESETS: DutyPreset[] = [
         text: '10193W',
       },
     ],
-    short: '125 MVA · Auto',
   },
   {
     basis: '16 MVA · 22 kV · line end · star winding',
     code: 'CV2III-600D/40.5-10193W',
-    duty: 'Line-end duty',
     id: 'line',
     metrics: [
       { label: 'Through-current', pct: 78, value: '466.5 / 600 A' },
@@ -109,7 +102,6 @@ const PRESETS: DutyPreset[] = [
         text: '10193W',
       },
     ],
-    short: '16 MVA · 22 kV',
   },
 ];
 
@@ -146,13 +138,6 @@ export default function TypeCode() {
       ? pinnedPart
       : namedIndices[turn % namedIndices.length];
 
-  const selectPreset = (index: number) => {
-    setPresetIndex(index);
-    setTurn(0);
-    setPinnedPart(null);
-    setPaused(true);
-  };
-
   return (
     <div
       className="oltc"
@@ -163,32 +148,13 @@ export default function TypeCode() {
       }}
       ref={ref}
     >
-      <div className="oltc-top">
-        <div
-          aria-label="Example transformer duties"
-          className="oltc-tabs"
-          role="tablist"
-        >
-          {PRESETS.map((item, index) => (
-            <button
-              aria-selected={index === presetIndex}
-              className={index === presetIndex ? 'oltc-tab on' : 'oltc-tab'}
-              key={item.id}
-              onClick={() => selectPreset(index)}
-              role="tab"
-              type="button"
-            >
-              {item.short}
-            </button>
-          ))}
-        </div>
+      <div className="oltc-head">
+        <p className="oltc-basis" key={preset.id}>
+          <span className="oltc-dot" />
+          {preset.basis}
+        </p>
         <span className="oltc-cli">npx oltc-selector</span>
       </div>
-
-      <p className="oltc-basis" key={preset.id}>
-        <span className="oltc-dot" />
-        {preset.basis}
-      </p>
 
       <div aria-label={preset.code} className="oltc-plate" role="group">
         {preset.parts.map((part, index) => {

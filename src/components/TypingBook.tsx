@@ -3,38 +3,34 @@ import { type KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 interface BookSample {
   author: string;
-  chapter: string;
   id: string;
-  label: string;
   text: string;
+  title: string;
 }
 
 const BOOKS: BookSample[] = [
   {
     author: 'F. Scott Fitzgerald',
-    chapter: 'Ch. 1',
     id: 'gatsby',
-    label: 'Gatsby',
     text: "In my younger and more vulnerable years my father gave me some advice that I've been turning over in my mind ever since. Whenever you feel like criticizing any one, he told me, just remember that all the people in this world haven't had the advantages that you've had.",
+    title: 'The Great Gatsby',
   },
   {
     author: 'Jane Austen',
-    chapter: 'Ch. 1',
     id: 'pride',
-    label: 'Pride',
     text: 'It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife. However little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families.',
+    title: 'Pride and Prejudice',
   },
   {
     author: 'Arthur Conan Doyle',
-    chapter: 'Ch. 1',
     id: 'sherlock',
-    label: 'Sherlock',
     text: 'To Sherlock Holmes she is always the woman. I have seldom heard him mention her under any other name. In his eyes she eclipses and predominates the whole of her sex.',
+    title: 'Sherlock Holmes',
   },
 ];
 
-// A miniature, actually-typeable TypeBooks studio: auto-types classic openings
-// while untouched, and turns into a live typing test the moment you click it.
+// A calm, clickable TypeBooks page: auto-types classic openings while untouched,
+// and lets visitors type live the moment they click into the page.
 export default function TypingBook() {
   const ref = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
@@ -52,7 +48,6 @@ export default function TypingBook() {
   const book = BOOKS[bookIndex];
   const full = book.text;
 
-  // Auto-typing preview when not in live typing mode.
   useEffect(() => {
     if (!inView || live || prefersReducedMotion()) return;
     const atEnd = typed >= full.length;
@@ -69,16 +64,6 @@ export default function TypingBook() {
     );
     return () => clearTimeout(timer);
   }, [full.length, inView, live, typed]);
-
-  const selectBook = (index: number) => {
-    setBookIndex(index);
-    setTyped(0);
-    setUserInput('');
-    setStartedAt(null);
-    setKeystrokes(0);
-    setMistakes(0);
-    setLiveWpm(0);
-  };
 
   const enterLive = () => {
     if (!live) {
@@ -152,40 +137,11 @@ export default function TypingBook() {
 
   return (
     <div className="tb" ref={ref}>
-      <div className="tb-top">
-        <div
-          aria-label="Choose a classic book"
-          className="tb-tabs"
-          role="tablist"
-        >
-          {BOOKS.map((item, index) => (
-            <button
-              aria-selected={index === bookIndex}
-              className={index === bookIndex ? 'tb-tab on' : 'tb-tab'}
-              key={item.id}
-              onClick={() => selectBook(index)}
-              role="tab"
-              type="button"
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-        <button
-          className={live ? 'tb-mode live' : 'tb-mode'}
-          onClick={live ? exitLive : enterLive}
-          type="button"
-        >
-          <span aria-hidden="true" className="tb-mode-dot" />
-          {live ? 'Esc to pause' : 'Try typing'}
-        </button>
-      </div>
-
       <div
         aria-label={
           live
-            ? `Typing ${book.label} by ${book.author}. Press Escape to pause.`
-            : `${book.label} by ${book.author}. Click to start typing.`
+            ? `Typing ${book.title} by ${book.author}. Press Escape to pause.`
+            : `${book.title} by ${book.author}. Click to start typing.`
         }
         className={live ? 'tb-page live' : 'tb-page'}
         onBlur={() => {
@@ -199,10 +155,12 @@ export default function TypingBook() {
       >
         <div className="tb-page-head">
           <span>
-            {book.author} · {book.chapter}
+            {book.title} · {book.author}
           </span>
           {finished ? (
-            <b className="tb-done">Passage complete</b>
+            <b className="tb-done">Done</b>
+          ) : live ? (
+            <span className="tb-live-tag">Esc</span>
           ) : (
             <span>{pct}%</span>
           )}
