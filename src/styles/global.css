@@ -1469,13 +1469,13 @@ main,
   flex-direction: column;
   height: auto;
   min-height: 268px;
-  padding: 24px 28px 16px;
+  padding: clamp(28px, 3.2vw, 38px) clamp(28px, 3.4vw, 40px) 22px;
 }
 
 .tuyi {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 22px;
 }
 
 .tuyi-hud {
@@ -1674,33 +1674,19 @@ main,
   font-family: var(--sans);
   font-size: 12.5px;
   font-weight: 500;
+  transition:
+    fill 0.6s,
+    filter 0.6s;
 }
 
-.tuyi-label text.tuyi-new {
-  animation: tuyi-swap-in 0.6s var(--ease) both;
+.tuyi-label.live text {
+  fill: var(--teal);
+  font-family: var(--mono);
 }
 
-.tuyi-label text.tuyi-old {
-  animation: tuyi-swap-out 0.45s var(--ease) both;
-  pointer-events: none;
-}
-
-@keyframes tuyi-swap-in {
-  from {
-    fill: #c9f2ed;
-    filter: blur(4px);
-    opacity: 0;
-  }
-  45% {
-    fill: #c9f2ed;
-  }
-}
-
-@keyframes tuyi-swap-out {
-  to {
-    filter: blur(4px);
-    opacity: 0;
-  }
+.tuyi-label.flash text {
+  fill: #c9f2ed;
+  filter: drop-shadow(0 0 8px var(--teal));
 }
 
 .tuyi-label .tuyi-ping {

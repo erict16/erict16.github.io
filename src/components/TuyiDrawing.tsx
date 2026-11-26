@@ -101,16 +101,18 @@ const LABELS: Label[] = [
   },
 ];
 
+const NOISE = 'abcdefghijklmnopqrstuvwxyz';
 const FILE = 'CM_outline.dwg';
 
-// One loop, in milliseconds: a pause, the scan line crosses the drawing and
-// each label changes language as the line reaches it, then a hold.
-const SWEEP_FROM = 900;
-const SWEEP = 2600;
-const X0 = -20;
-const X1 = 580;
-const SWAP = 650;
-const LOOP = 7000;
+// One loop, in milliseconds: a pause, the scan line crosses the drawing,
+// each label scrambles into the next language as the line reaches it, then a hold.
+const SWEEP_FROM = 1100;
+const SWEEP = 2800;
+const X0 = -10;
+const X1 = 570;
+const TYPE = 420;
+const FLASH = 700;
+const LOOP = 7600;
 
 const beamX = (t: number) =>
   X0 + (X1 - X0) * Math.min(1, Math.max(0, (t - SWEEP_FROM) / SWEEP));
@@ -119,13 +121,22 @@ const beamX = (t: number) =>
 const startOf = (label: Label, lang: Lang) => {
   const left =
     label.anchor === 'end'
-      ? label.tx - label.text[lang].length * 6.4
+      ? label.tx - label.text[lang].length * 6.6
       : label.tx;
   return SWEEP_FROM + ((left - X0) / (X1 - X0)) * SWEEP;
 };
 
+function scrambled(text: string, shown: number) {
+  let out = text.slice(0, shown);
+  for (let i = shown; i < text.length; i++) {
+    out +=
+      text[i] === ' ' ? ' ' : NOISE[Math.floor(Math.random() * NOISE.length)];
+  }
+  return out;
+}
+
 // A tap-changer outline on a CAD sheet. A scan line crosses it and every
-// label is rewritten in the next language, the way Tuyi writes a translation
+// label scrambles into the next language, the way Tuyi writes a translation
 // back into a new drawing.
 export default function TuyiDrawing() {
   const ref = useRef<HTMLDivElement>(null);
@@ -162,7 +173,9 @@ export default function TuyiDrawing() {
   const x = beamX(t);
   const sweeping = !still && t > SWEEP_FROM && t < SWEEP_FROM + SWEEP;
   const starts = LABELS.map((label) => startOf(label, to));
-  const changedCount = still ? 0 : starts.filter((start) => t >= start).length;
+  const changedCount = still
+    ? 0
+    : starts.filter((start) => t >= start + TYPE).length;
   const done = changedCount === LABELS.length;
   const shown = done ? to : from;
 
@@ -204,13 +217,13 @@ export default function TuyiDrawing() {
           <defs>
             <linearGradient id="tuyi-trail" x1="0" x2="1" y1="0" y2="0">
               <stop offset="0" stopColor="#6cbdb5" stopOpacity="0" />
-              <stop offset="1" stopColor="#6cbdb5" stopOpacity="0.16" />
+              <stop offset="1" stopColor="#6cbdb5" stopOpacity="0.22" />
             </linearGradient>
             <linearGradient id="tuyi-beam" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0" stopColor="#9fe3dc" stopOpacity="0" />
-              <stop offset="0.25" stopColor="#c9f2ed" />
-              <stop offset="0.75" stopColor="#c9f2ed" />
-              <stop offset="1" stopColor="#9fe3dc" stopOpacity="0" />
+              <stop offset="0" stopColor="#6cbdb5" stopOpacity="0" />
+              <stop offset="0.2" stopColor="#9fe3dc" />
+              <stop offset="0.8" stopColor="#9fe3dc" />
+              <stop offset="1" stopColor="#6cbdb5" stopOpacity="0" />
             </linearGradient>
           </defs>
 
@@ -326,16 +339,16 @@ export default function TuyiDrawing() {
               <rect
                 fill="url(#tuyi-trail)"
                 height="300"
-                width="64"
-                x="-64"
+                width="90"
+                x="-90"
                 y="0"
               />
               <rect
                 className="tuyi-scan"
                 fill="url(#tuyi-beam)"
                 height="300"
-                width="1.4"
-                x="-0.7"
+                width="1.6"
+                x="-0.8"
                 y="0"
               />
             </g>
@@ -343,11 +356,21 @@ export default function TuyiDrawing() {
 
           {LABELS.map((label, index) => {
             const start = starts[index];
-            const changed = !still && t >= start;
-            const fresh = changed && t < start + SWAP;
+            const target = label.text[to];
+            const typed = Math.floor(((t - start) / TYPE) * target.length);
+            const live = !still && t >= start && typed < target.length;
+            const changed = !still && t >= start + TYPE;
+            const flash = changed && t < start + TYPE + FLASH;
+            const text = changed
+              ? target
+              : live
+                ? scrambled(target, Math.max(0, typed))
+                : label.text[from];
             return (
               <g
-                className={fresh ? 'tuyi-label fresh' : 'tuyi-label'}
+                className={['tuyi-label', live && 'live', flash && 'flash']
+                  .filter(Boolean)
+                  .join(' ')}
                 key={label.text.en}
               >
                 {label.px >= 0 && (
@@ -357,12 +380,12 @@ export default function TuyiDrawing() {
                         label.anchor === 'end' ? label.tx + 8 : label.tx - 8
                       },${label.ty - 4}`}
                     />
-                    {fresh && (
+                    {flash && (
                       <circle
                         className="tuyi-ping"
                         cx={label.px}
                         cy={label.py}
-                        r="9"
+                        r="10"
                       />
                     )}
                     <circle
@@ -373,25 +396,8 @@ export default function TuyiDrawing() {
                     />
                   </>
                 )}
-                {fresh && (
-                  <text
-                    className="tuyi-old"
-                    key={`${round}-old`}
-                    textAnchor={label.anchor}
-                    x={label.tx}
-                    y={label.ty}
-                  >
-                    {label.text[from]}
-                  </text>
-                )}
-                <text
-                  className={fresh ? 'tuyi-new' : undefined}
-                  key={changed ? `${round}-new` : `${round}-was`}
-                  textAnchor={label.anchor}
-                  x={label.tx}
-                  y={label.ty}
-                >
-                  {changed ? label.text[to] : label.text[from]}
+                <text textAnchor={label.anchor} x={label.tx} y={label.ty}>
+                  {text}
                 </text>
               </g>
             );
