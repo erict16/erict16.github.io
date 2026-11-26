@@ -9,10 +9,16 @@ interface Props {
 const { arrow = false, text } = Astro.props;
 ---
 
-<div class="card-text">
-  <h3>
-    <slot />
-    {arrow && <ArrowUpRightIcon aria-hidden="true" />}
-  </h3>
-  <p>{text}</p>
+<div class={arrow ? 'card-text has-arrow' : 'card-text'}>
+  <div class="card-copy">
+    <h3>
+      <slot />
+    </h3>
+    <p>{text}</p>
+  </div>
+  {arrow && (
+    <span aria-hidden="true" class="card-go">
+      <ArrowUpRightIcon />
+    </span>
+  )}
 </div>
